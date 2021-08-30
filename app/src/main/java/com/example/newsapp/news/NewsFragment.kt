@@ -5,8 +5,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.View
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
 import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentNewsBinding
@@ -31,6 +33,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
 
         binding.apply {
             newsRecyclerView.setHasFixedSize(true)
+            newsRecyclerView.itemAnimator = null
             newsRecyclerView.adapter = adapter.withLoadStateHeaderAndFooter(
                 footer = NewsPhotoLoadStateAdapter {
                     adapter.retry()
@@ -39,10 +42,34 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
                     adapter.retry()
                 }
             )
+            btnRetry.setOnClickListener {
+                adapter.retry()
+            }
         }
 
         newsViewModel.headlines.observe(viewLifecycleOwner) {
             adapter.submitData(viewLifecycleOwner.lifecycle, it)
+        }
+
+        adapter.addLoadStateListener { loadState ->
+            binding.apply {
+                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
+                newsRecyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
+                btnRetry.isVisible = loadState.source.refresh is LoadState.Error
+                textViewError.isVisible = loadState.source.refresh is LoadState.Error
+
+
+                // If no results from query
+                if (loadState.source.refresh is LoadState.NotLoading &&
+                    loadState.append.endOfPaginationReached &&
+                    adapter.itemCount < 1
+                ) {
+                    newsRecyclerView.isVisible = false
+                    textViewNoResults.isVisible = true
+                } else {
+                    textViewNoResults.isVisible = false
+                }
+            }
         }
 
         setHasOptionsMenu(true)
