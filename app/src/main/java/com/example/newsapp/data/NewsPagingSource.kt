@@ -9,17 +9,22 @@ import java.io.IOException
 class NewsPagingSource(
     private val newsAPI: NewsAPI,
     private val query: String
-) : PagingSource<Int, Article>() {
+) : PagingSource<Int, Articles>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
-        TODO("NOT YET IMPLEMENTED")
+    override fun getRefreshKey(state: PagingState<Int, Articles>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Articles> {
         val position = params.key ?: 1
 
+
         return try {
-            val response = newsAPI.headlines(query, position, params.loadSize)
+            //val response = newsAPI.topHeadlines(query, position, params.loadSize)
+            val response = newsAPI.everything(query, position, params.loadSize)
             val news = response.articles
 
             LoadResult.Page(
@@ -27,12 +32,10 @@ class NewsPagingSource(
                 prevKey = if (position == 1) null else position - 1,
                 nextKey = if (news.isEmpty()) null else position + 1
             )
-        } catch (exception: IOException) {
-            LoadResult.Error(exception)
-        } catch (exception: HttpException) {
-            LoadResult.Error(exception)
+        } catch (e: IOException) {
+            LoadResult.Error(e)
+        } catch (e: HttpException) {
+            LoadResult.Error(e)
         }
-
     }
-
 }

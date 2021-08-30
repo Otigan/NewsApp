@@ -10,13 +10,12 @@ import javax.inject.Singleton
 @Singleton
 class NewsRepository @Inject constructor(private val newsAPI: NewsAPI) {
 
-    fun getHeadlines(query: String) =
-        Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                maxSize = 100,
-                enablePlaceholders = false
-            ),
-            pagingSourceFactory = { NewsPagingSource(newsAPI, query) }
-        ).liveData
+    fun getHeadlines(query: String) = Pager(
+        config = PagingConfig(
+            pageSize = 5,
+            maxSize = 50,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { NewsPagingSource(newsAPI, query) }
+    ).liveData
 }

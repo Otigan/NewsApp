@@ -1,6 +1,7 @@
 package com.example.newsapp.di
 
 import com.example.newsapp.api.NewsAPI
+import com.example.newsapp.api.NewsAPI.Companion.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,23 +11,23 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 
-@Module
 @InstallIn(SingletonComponent::class)
+@Module
 object RetrofitModule {
 
 
-    @Provides
     @Singleton
-    fun provideRetrofit(): Retrofit =
-        Retrofit.Builder()
-            .baseUrl(NewsAPI.BASE_URL)
+    @Provides
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+    }
 
-
-    @Provides
     @Singleton
-    fun provideNewsApi(retrofit: Retrofit): NewsAPI =
-        retrofit.create(NewsAPI::class.java)
-
+    @Provides
+    fun providesApi(retrofit: Retrofit): NewsAPI {
+        return retrofit.create(NewsAPI::class.java)
+    }
 }

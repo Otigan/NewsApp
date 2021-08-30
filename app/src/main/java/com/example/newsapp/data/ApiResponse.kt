@@ -3,9 +3,11 @@ package com.example.newsapp.data
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
+
 @Parcelize
-data class NewsResponse(
+data class ApiResponse(
+
     val status: String,
     val totalResults: Int,
-    val articles: List<Article>
+    val articles: List<Articles>
 ) : Parcelable

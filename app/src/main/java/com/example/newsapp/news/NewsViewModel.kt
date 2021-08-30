@@ -10,20 +10,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel @Inject constructor(private val repository: NewsRepository) : ViewModel() {
+class NewsViewModel @Inject constructor(private val repo: NewsRepository) : ViewModel() {
 
     private val currentQuery = MutableLiveData<String>(DEFAULT_QUERY)
 
-    val news = currentQuery.switchMap { newQuery ->
-        repository.getHeadlines(newQuery).cachedIn(viewModelScope)
+
+    val headlines = currentQuery.switchMap { newQuery ->
+        repo.getHeadlines(newQuery).cachedIn(viewModelScope)
     }
 
-    fun searchNews(query: String) {
+    fun getHeadlines(query: String) {
         currentQuery.value = query
     }
 
     companion object {
-        private const val DEFAULT_QUERY = "us"
+        private const val DEFAULT_QUERY = "ru"
     }
 
 }
