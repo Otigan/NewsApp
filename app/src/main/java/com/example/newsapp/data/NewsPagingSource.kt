@@ -5,6 +5,7 @@ import androidx.paging.PagingState
 import com.example.newsapp.api.NewsAPI
 import retrofit2.HttpException
 import java.io.IOException
+import java.util.*
 
 class NewsPagingSource(
     private val newsAPI: NewsAPI,
@@ -21,10 +22,12 @@ class NewsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Articles> {
         val position = params.key ?: 1
 
+        val lang = Locale.getDefault().language.toString()
 
         return try {
             //val response = newsAPI.topHeadlines(query, position, params.loadSize)
-            val response = newsAPI.everything(query, position, params.loadSize)
+
+            val response = newsAPI.everything(query, position, params.loadSize, lang)
             val news = response.articles
 
             LoadResult.Page(

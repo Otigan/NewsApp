@@ -14,6 +14,15 @@ interface NewsAPI {
     }
 
     @Headers("Authorization: $API_KEY")
+    @GET("everything")
+    suspend fun everything(
+        @Query("q") query: String,
+        @Query("page") page: Int,
+        @Query("pageSize") perPage: Int,
+        @Query("language") lang: String
+    ): ApiResponse
+
+    @Headers("Authorization: $API_KEY")
     @GET("top-headlines")
     suspend fun topHeadlines(
         @Query("country") country: String,
@@ -21,12 +30,5 @@ interface NewsAPI {
         @Query("pageSize") perPage: Int
     ): ApiResponse
 
-    @Headers("Authorization: $API_KEY")
-    @GET("everything")
-    suspend fun everything(
-        @Query("q") query: String,
-        @Query("page") page: Int,
-        @Query("pageSize") perPage: Int
-    ): ApiResponse
 
 }

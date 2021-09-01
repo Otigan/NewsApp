@@ -12,7 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.NewsApp">
+        android:theme="@style/Theme.MaterialComponents.NoActionBar">
         <meta-data
             android:name="com.otigan.news.API_KEY"
             android:value="${API_KEY}" />
