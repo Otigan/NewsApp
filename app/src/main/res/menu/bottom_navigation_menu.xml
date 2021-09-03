@@ -3,14 +3,17 @@
 
     <item
         android:id="@+id/newsFragment"
+        android:icon="@drawable/ic_baseline_article_24"
         android:title="All news" />
 
     <item
         android:id="@+id/headlinesFragment"
+        android:icon="@drawable/ic_baseline_priority_high_24"
         android:title="Top headlines" />
 
     <item
         android:id="@+id/settingsFragment"
+        android:icon="@drawable/ic_baseline_settings_24"
         android:title="Settings" />
 
 </menu>

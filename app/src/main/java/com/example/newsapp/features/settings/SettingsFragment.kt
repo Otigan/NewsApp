@@ -1,4 +1,4 @@
-package com.example.newsapp.news
+package com.example.newsapp.features.settings
 
 import androidx.fragment.app.Fragment
 import com.example.newsapp.R

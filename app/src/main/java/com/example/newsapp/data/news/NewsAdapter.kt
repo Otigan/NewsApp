@@ -1,4 +1,4 @@
-package com.example.newsapp.data
+package com.example.newsapp.data.news
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.newsapp.R
+import com.example.newsapp.api.Articles
 import com.example.newsapp.databinding.ItemNewsBinding
 
 class NewsAdapter : PagingDataAdapter<Articles, NewsAdapter.NewsViewHolder>(NEWS_COMPARATOR) {

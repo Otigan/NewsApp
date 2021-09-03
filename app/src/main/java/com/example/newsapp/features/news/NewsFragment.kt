@@ -1,4 +1,4 @@
-package com.example.newsapp.news
+package com.example.newsapp.features.news
 
 import android.os.Bundle
 import android.view.Menu
@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import com.example.newsapp.R
-import com.example.newsapp.data.NewsAdapter
+import com.example.newsapp.data.news.NewsAdapter
 import com.example.newsapp.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,22 +32,24 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         val adapter = NewsAdapter()
 
         binding.apply {
-            newsRecyclerView.setHasFixedSize(true)
-            newsRecyclerView.itemAnimator = null
-            newsRecyclerView.adapter = adapter.withLoadStateHeaderAndFooter(
-                footer = NewsPhotoLoadStateAdapter {
-                    adapter.retry()
-                },
-                header = NewsPhotoLoadStateAdapter {
+            newsRecyclerView.apply {
+                setHasFixedSize(true)
+                itemAnimator = null
+                this.adapter = adapter.withLoadStateHeaderAndFooter(
+                    footer = NewsPhotoLoadStateAdapter {
+                        adapter.retry()
+                    },
+                    header = NewsPhotoLoadStateAdapter {
+                        adapter.retry()
+                    }
+                )
+                btnRetry.setOnClickListener {
                     adapter.retry()
                 }
-            )
-            btnRetry.setOnClickListener {
-                adapter.retry()
             }
         }
 
-        newsViewModel.headlines.observe(viewLifecycleOwner) {
+        newsViewModel.allNews.observe(viewLifecycleOwner) {
             adapter.submitData(viewLifecycleOwner.lifecycle, it)
         }
 
