@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.newsapp.R
-import com.example.newsapp.data.headlines.TopHeadlinesAdapter
+import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +24,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
 
         _binding = FragmentHeadlinesBinding.bind(view)
 
-        val adapter = TopHeadlinesAdapter()
+        val adapter = NewsAdapter()
 
         binding.apply {
             topHeadlinesRecyclerView.apply {

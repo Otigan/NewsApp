@@ -4,7 +4,6 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.liveData
 import com.example.newsapp.api.NewsAPI
-import com.example.newsapp.data.headlines.TopHeadlinesPagingSource
 import com.example.newsapp.data.news.NewsPagingSource
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -18,7 +17,7 @@ class Repository @Inject constructor(private val newsAPI: NewsAPI) {
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { TopHeadlinesPagingSource(newsAPI) }
+        pagingSourceFactory = { NewsPagingSource(newsAPI,  null,1) }
     ).liveData
 
     fun getNews(query: String) = Pager(
@@ -27,6 +26,6 @@ class Repository @Inject constructor(private val newsAPI: NewsAPI) {
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { NewsPagingSource(newsAPI, query) }
+        pagingSourceFactory = { NewsPagingSource(newsAPI, query, 2) }
     ).liveData
 }

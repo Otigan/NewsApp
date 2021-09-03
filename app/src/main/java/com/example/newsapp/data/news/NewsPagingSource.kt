@@ -10,7 +10,8 @@ import java.util.*
 
 class NewsPagingSource(
     private val newsAPI: NewsAPI,
-    private val query: String
+    private val query: String?,
+    private val newsType: Int
 ) : PagingSource<Int, Articles>() {
 
     override fun getRefreshKey(state: PagingState<Int, Articles>): Int? {
@@ -24,11 +25,26 @@ class NewsPagingSource(
         val position = params.key ?: 1
 
         val lang = Locale.getDefault().language.toString()
+        val country = Locale.getDefault().country.toString()
 
         return try {
             //val response = newsAPI.topHeadlines(query, position, params.loadSize)
+            val response = when (newsType) {
+                NewsType.Common.value -> newsAPI.everything(
+                    query!!,
+                    position,
+                    params.loadSize,
+                    lang
+                )
+                NewsType.TopHeadline.value -> newsAPI.topHeadlines(
+//                    country,
+                    "ru",
+                    position,
+                    params.loadSize
+                )
+                else -> throw IllegalStateException()
+            }
 
-            val response = newsAPI.everything(query, position, params.loadSize, lang)
             val news = response.articles
 
             LoadResult.Page(
@@ -42,4 +58,10 @@ class NewsPagingSource(
             LoadResult.Error(e)
         }
     }
+
+    enum class NewsType(val value: Int) {
+        TopHeadline(1),
+        Common(2),
+    }
+
 }

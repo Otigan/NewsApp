@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.paging.LoadState
 import com.example.newsapp.R
-import com.example.newsapp.data.news.NewsAdapter
+import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
