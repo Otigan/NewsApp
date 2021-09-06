@@ -1,7 +1,14 @@
 package com.example.newsapp.features.settings
 
-import androidx.fragment.app.Fragment
+import android.content.SharedPreferences
+import android.os.Bundle
+import androidx.preference.PreferenceFragmentCompat
 import com.example.newsapp.R
 
-class SettingsFragment : Fragment(R.layout.fragment_settings) {
+class SettingsFragment : PreferenceFragmentCompat() {
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        setPreferencesFromResource(R.xml.preference_settings, rootKey)
+    }
+
 }

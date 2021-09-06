@@ -1,16 +1,21 @@
 package com.example.newsapp.data.headlines
 
+import android.content.Context
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import androidx.preference.PreferenceManager
 import com.example.newsapp.api.Articles
 import com.example.newsapp.api.NewsAPI
+import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.HttpException
 import java.io.IOException
-import java.util.*
 import javax.inject.Inject
 
 
-class TopHeadlinesPagingSource @Inject constructor(private val api: NewsAPI) :
+class TopHeadlinesPagingSource @Inject constructor(
+    private val api: NewsAPI,
+    @ApplicationContext private val context: Context
+) :
     PagingSource<Int, Articles>() {
 
     override fun getRefreshKey(state: PagingState<Int, Articles>): Int? {
@@ -24,10 +29,14 @@ class TopHeadlinesPagingSource @Inject constructor(private val api: NewsAPI) :
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Articles> {
 
         val position = params.key ?: 1
+        val sharedPreferences =
+            PreferenceManager.getDefaultSharedPreferences(context)
+
+        val country = sharedPreferences.getString("country", "")
 
         return try {
-            val country = Locale.getDefault().country.toString()
-            val response = api.topHeadlines(country, position, params.loadSize)
+
+            val response = api.topHeadlines(country!!, position, params.loadSize)
 
             val headlines = response.articles
 

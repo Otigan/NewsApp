@@ -12,8 +12,12 @@
     <fragment
         android:id="@+id/headlinesFragment"
         android:name="com.example.newsapp.features.headlines.HeadlinesFragment"
-        android:label="Top headlines"
-        tools:layout="@layout/fragment_headlines" />
+        android:label="Top headlines in {country}"
+        tools:layout="@layout/fragment_headlines">
+        <argument
+            android:name="country"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.newsapp.features.settings.SettingsFragment"

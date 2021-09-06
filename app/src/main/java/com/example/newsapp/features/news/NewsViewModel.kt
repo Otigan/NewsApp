@@ -1,5 +1,6 @@
 package com.example.newsapp.features.news
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
@@ -10,7 +11,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel @Inject constructor(private val repo: Repository) : ViewModel() {
+class NewsViewModel @Inject constructor(
+    private val repo: Repository,
+) : ViewModel() {
 
 
     private val currentQuery = MutableLiveData<String>(DEFAULT_QUERY)
@@ -22,6 +25,7 @@ class NewsViewModel @Inject constructor(private val repo: Repository) : ViewMode
 
     val allNews = currentQuery.switchMap {
         repo.getNews(it).cachedIn(viewModelScope)
+
     }
 
     companion object {
