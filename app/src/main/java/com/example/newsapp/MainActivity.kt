@@ -1,6 +1,7 @@
 package com.example.newsapp
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -39,12 +40,17 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-        val country = sharedPreferences.getString("country", "")
+
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
                 R.id.headlinesFragment -> {
 
-                    arguments?.putString("country", country)
+                    val country = sharedPreferences.getString("country", "")
+
+                    val loc = Locale("", country)
+
+                    Toast.makeText(this, loc.displayCountry, Toast.LENGTH_SHORT).show()
+                    arguments?.putString("country", loc.displayCountry)
                 }
             }
 
