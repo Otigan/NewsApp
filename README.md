@@ -2,7 +2,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This is my pet-project that lets you see news
+This is my pet-project that lets you see news form [NewsAPI](https://newsapi.org/)
 
 ### Built With
 
