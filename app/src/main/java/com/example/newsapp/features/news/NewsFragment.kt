@@ -8,14 +8,16 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.newsapp.R
+import com.example.newsapp.api.Articles
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NewsFragment : Fragment(R.layout.fragment_news) {
+class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickListener {
 
     private val newsViewModel by viewModels<NewsViewModel>()
 
@@ -29,7 +31,7 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
 
         _binding = FragmentNewsBinding.bind(view)
 
-        val adapter = NewsAdapter()
+        val adapter = NewsAdapter(this)
 
         binding.apply {
             newsRecyclerView.apply {
@@ -75,6 +77,11 @@ class NewsFragment : Fragment(R.layout.fragment_news) {
         }
 
         setHasOptionsMenu(true)
+    }
+
+    override fun onItemClick(article: Articles) {
+        val action = NewsFragmentDirections.actionNewsFragmentToDetailedNewsFragment(article, article.title)
+        findNavController().navigate(action)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

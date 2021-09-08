@@ -1,28 +1,43 @@
 package com.example.newsapp.api
 
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import javax.annotation.Nullable
 
 @Parcelize
 data class Articles(
 
-    val id: String,
-    val source: Source,
-    val author: String,
-    val title: String,
-    val description: String,
-    val url: String,
-    val urlToImage: String,
-    val publishedAt: String,
-    val content: String
+    @SerializedName("source")
+    val source: Source?,
+
+
+    @SerializedName("author")
+    val author: String?,
+
+
+    @SerializedName("title")
+    val title: String?,
+
+
+    @SerializedName("description")
+    val description: String?,
+
+
+    @SerializedName("url")
+    val url: String?,
+
+
+    @SerializedName("urlToImage")
+    val urlToImage: String?,
+
+
+    @SerializedName("publishedAt")
+    val publishedAt: String?,
+
+
+    @SerializedName("content")
+    val content: String?
 ) : Parcelable {
-
-
-    @Parcelize
-    data class Source(
-
-        val id: String,
-        val name: String
-    ) : Parcelable
 
 }

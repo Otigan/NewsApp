@@ -11,7 +11,8 @@ import com.example.newsapp.R
 import com.example.newsapp.api.Articles
 import com.example.newsapp.databinding.ItemNewsBinding
 
-class NewsAdapter : PagingDataAdapter<Articles, NewsAdapter.NewsViewHolder>(NEWS_COMPARATOR) {
+class NewsAdapter(private val listener: OnItemClickListener) :
+    PagingDataAdapter<Articles, NewsAdapter.NewsViewHolder>(NEWS_COMPARATOR) {
 
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
@@ -30,8 +31,20 @@ class NewsAdapter : PagingDataAdapter<Articles, NewsAdapter.NewsViewHolder>(NEWS
         return NewsViewHolder(binding)
     }
 
-    class NewsViewHolder(private val binding: ItemNewsBinding) :
+    inner class NewsViewHolder(private val binding: ItemNewsBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.root.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val item = getItem(position)
+                    if (item != null) {
+                        listener.onItemClick(item)
+                    }
+                }
+            }
+        }
 
         fun bind(article: Articles) {
             binding.apply {
@@ -48,11 +61,14 @@ class NewsAdapter : PagingDataAdapter<Articles, NewsAdapter.NewsViewHolder>(NEWS
 
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(article: Articles)
+    }
 
     companion object {
         private val NEWS_COMPARATOR = object : DiffUtil.ItemCallback<Articles>() {
             override fun areItemsTheSame(oldItem: Articles, newItem: Articles) =
-                oldItem.id == newItem.id
+                oldItem.title == newItem.title
 
             override fun areContentsTheSame(oldItem: Articles, newItem: Articles) =
                 oldItem == newItem

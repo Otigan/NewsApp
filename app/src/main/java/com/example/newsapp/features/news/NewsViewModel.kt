@@ -1,22 +1,24 @@
 package com.example.newsapp.features.news
 
-import android.content.Context
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.example.newsapp.data.Repository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
     private val repo: Repository,
+    state: SavedStateHandle
 ) : ViewModel() {
 
 
-    private val currentQuery = MutableLiveData<String>(DEFAULT_QUERY)
+    private val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
 
 
     fun getHeadlines(query: String) {
@@ -29,6 +31,7 @@ class NewsViewModel @Inject constructor(
     }
 
     companion object {
+        private const val CURRENT_QUERY = "current_query"
         private const val DEFAULT_QUERY = "cats"
     }
 

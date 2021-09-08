@@ -45,11 +45,12 @@ class MainActivity : AppCompatActivity() {
             when (destination.id) {
                 R.id.headlinesFragment -> {
 
-                    val country = sharedPreferences.getString("country", "")
+                    val country =
+                        sharedPreferences.getString("country", Locale.getDefault().country)
 
                     val loc = Locale("", country)
 
-                    Toast.makeText(this, loc.displayCountry, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this, loc.displayCountry, Toast.LENGTH_SHORT).show()
                     arguments?.putString("country", loc.displayCountry)
                 }
             }
