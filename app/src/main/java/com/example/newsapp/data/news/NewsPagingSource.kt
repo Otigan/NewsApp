@@ -4,12 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.newsapp.api.Articles
+import com.example.newsapp.api.Article
 import com.example.newsapp.api.NewsAPI
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.HttpException
@@ -23,7 +22,7 @@ class NewsPagingSource(
     private val newsType: Int,
     @ApplicationContext private val context: Context
 
-) : PagingSource<Int, Articles>() {
+) : PagingSource<Int, Article>() {
 
 
     @InstallIn(SingletonComponent::class)
@@ -32,14 +31,14 @@ class NewsPagingSource(
         fun sharedPref(): SharedPreferences
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Articles>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Articles> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
         val position = params.key ?: 1
 
         val lang = Locale.getDefault().language.toString()

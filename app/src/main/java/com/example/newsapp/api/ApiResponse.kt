@@ -9,5 +9,5 @@ data class ApiResponse(
 
     val status: String,
     val totalResults: Int,
-    val articles: List<Articles>
+    val articles: List<Article>
 ) : Parcelable

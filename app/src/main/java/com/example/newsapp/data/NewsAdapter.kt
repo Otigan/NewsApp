@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.newsapp.R
-import com.example.newsapp.api.Articles
+import com.example.newsapp.api.Article
 import com.example.newsapp.databinding.ItemNewsBinding
 
 class NewsAdapter(private val listener: OnItemClickListener) :
-    PagingDataAdapter<Articles, NewsAdapter.NewsViewHolder>(NEWS_COMPARATOR) {
+    PagingDataAdapter<Article, NewsAdapter.NewsViewHolder>(NEWS_COMPARATOR) {
 
 
     override fun onBindViewHolder(holder: NewsViewHolder, position: Int) {
@@ -46,7 +46,7 @@ class NewsAdapter(private val listener: OnItemClickListener) :
             }
         }
 
-        fun bind(article: Articles) {
+        fun bind(article: Article) {
             binding.apply {
                 Glide.with(itemView)
                     .load(article.urlToImage)
@@ -62,15 +62,15 @@ class NewsAdapter(private val listener: OnItemClickListener) :
     }
 
     interface OnItemClickListener {
-        fun onItemClick(article: Articles)
+        fun onItemClick(article: Article)
     }
 
     companion object {
-        private val NEWS_COMPARATOR = object : DiffUtil.ItemCallback<Articles>() {
-            override fun areItemsTheSame(oldItem: Articles, newItem: Articles) =
+        private val NEWS_COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
+            override fun areItemsTheSame(oldItem: Article, newItem: Article) =
                 oldItem.title == newItem.title
 
-            override fun areContentsTheSame(oldItem: Articles, newItem: Articles) =
+            override fun areContentsTheSame(oldItem: Article, newItem: Article) =
                 oldItem == newItem
         }
     }

@@ -1,6 +1,9 @@
 package com.example.newsapp.features.headlines
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -8,7 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.newsapp.R
-import com.example.newsapp.api.Articles
+import com.example.newsapp.api.Article
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,19 +25,21 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines), NewsAdapter.OnI
 
     private val binding get() = _binding!!
 
+    private lateinit var adapter: NewsAdapter
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentHeadlinesBinding.bind(view)
 
-        val adapter = NewsAdapter(this)
+        adapter = NewsAdapter(this)
 
         binding.apply {
             topHeadlinesRecyclerView.apply {
                 setHasFixedSize(true)
                 itemAnimator = null
-                this.adapter = adapter
+                this.adapter = this@HeadlinesFragment.adapter
             }
         }
 
@@ -54,9 +59,31 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines), NewsAdapter.OnI
             }
         }
 
+        setHasOptionsMenu(true)
+
     }
 
-    override fun onItemClick(article: Articles) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.menu_headlines, menu)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.action_refresh -> {
+                topHeadlinesViewModel.headlines().observe(viewLifecycleOwner) {
+                    adapter.submitData(viewLifecycleOwner.lifecycle, it)
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onItemClick(article: Article) {
         val action = HeadlinesFragmentDirections.actionHeadlinesFragmentToDetailedNewsFragment(
             article,
             article.title

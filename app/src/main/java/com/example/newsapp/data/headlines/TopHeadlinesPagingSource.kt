@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import androidx.preference.PreferenceManager
-import com.example.newsapp.api.Articles
+import com.example.newsapp.api.Article
 import com.example.newsapp.api.NewsAPI
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.HttpException
@@ -16,9 +16,9 @@ class TopHeadlinesPagingSource @Inject constructor(
     private val api: NewsAPI,
     @ApplicationContext private val context: Context
 ) :
-    PagingSource<Int, Articles>() {
+    PagingSource<Int, Article>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Articles>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
@@ -26,7 +26,7 @@ class TopHeadlinesPagingSource @Inject constructor(
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Articles> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Article> {
 
         val position = params.key ?: 1
         val sharedPreferences =

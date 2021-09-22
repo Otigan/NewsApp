@@ -3,7 +3,9 @@ package com.example.newsapp.features.news
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -11,7 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import com.example.newsapp.R
-import com.example.newsapp.api.Articles
+import com.example.newsapp.api.Article
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentNewsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,28 +27,30 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
 
     private val binding get() = _binding!!
 
+    private lateinit var adapter: NewsAdapter
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentNewsBinding.bind(view)
 
-        val adapter = NewsAdapter(this)
+        adapter = NewsAdapter(this)
 
         binding.apply {
             newsRecyclerView.apply {
                 setHasFixedSize(true)
                 itemAnimator = null
-                this.adapter = adapter.withLoadStateHeaderAndFooter(
+                this.adapter = this@NewsFragment.adapter.withLoadStateHeaderAndFooter(
                     footer = NewsPhotoLoadStateAdapter {
-                        adapter.retry()
+                        this@NewsFragment.adapter.retry()
                     },
                     header = NewsPhotoLoadStateAdapter {
-                        adapter.retry()
+                        this@NewsFragment.adapter.retry()
                     }
                 )
                 btnRetry.setOnClickListener {
-                    adapter.retry()
+                    this@NewsFragment.adapter.retry()
                 }
             }
         }
@@ -76,11 +80,14 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
             }
         }
 
+
+
         setHasOptionsMenu(true)
     }
 
-    override fun onItemClick(article: Articles) {
-        val action = NewsFragmentDirections.actionNewsFragmentToDetailedNewsFragment(article, article.title)
+    override fun onItemClick(article: Article) {
+        val action =
+            NewsFragmentDirections.actionNewsFragmentToDetailedNewsFragment(article, article.title)
         findNavController().navigate(action)
     }
 
@@ -91,6 +98,7 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
 
         val searchItem = menu.findItem(R.id.action_search)
         val searchView = searchItem.actionView as SearchView
+
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -108,6 +116,18 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
             }
         })
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.action_refresh -> {
+                Toast.makeText(context, "refresh", Toast.LENGTH_SHORT).show()
+                newsViewModel.getHeadlines()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
