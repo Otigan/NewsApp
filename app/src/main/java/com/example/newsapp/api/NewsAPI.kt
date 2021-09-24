@@ -17,7 +17,7 @@ interface NewsAPI {
     suspend fun everything(
         @Query("q") query: String,
         @Query("page") page: Int,
-        @Query("pageSize") perPage: Int,
+        @Query("pageSize") pageSize: Int,
         @Query("language") lang: String
     ): ApiResponse
 
@@ -26,7 +26,7 @@ interface NewsAPI {
     suspend fun topHeadlines(
         @Query("country") country: String,
         @Query("page") page: Int,
-        @Query("pageSize") perPage: Int
+        @Query("pageSize") pageSize: Int
     ): ApiResponse
 
 

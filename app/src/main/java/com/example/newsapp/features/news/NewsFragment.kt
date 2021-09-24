@@ -66,6 +66,13 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
                 btnRetry.isVisible = loadState.source.refresh is LoadState.Error
                 textViewError.isVisible = loadState.source.refresh is LoadState.Error
 
+                if (loadState.source.refresh is LoadState.Error) {
+                    Toast.makeText(
+                        context,
+                        (loadState.source.refresh as LoadState.Error).error.localizedMessage,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
                 // If no results from query
                 if (loadState.source.refresh is LoadState.NotLoading &&
@@ -105,7 +112,7 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
 
                 if (query != null) {
                     binding.newsRecyclerView.scrollToPosition(0)
-                    newsViewModel.getHeadlines(query)
+                    newsViewModel.changeQuery(query)
                     searchView.clearFocus()
                 }
                 return true
@@ -121,8 +128,7 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
 
         when (item.itemId) {
             R.id.action_refresh -> {
-                Toast.makeText(context, "refresh", Toast.LENGTH_SHORT).show()
-                newsViewModel.getHeadlines()
+                newsViewModel.changeQuery(newsViewModel.currentQuery.value.toString())
             }
         }
         return super.onOptionsItemSelected(item)

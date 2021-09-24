@@ -37,7 +37,7 @@
         tools:layout="@layout/fragment_details">
         <argument
             android:name="article"
-            app:argType="com.example.newsapp.api.Articles" />
+            app:argType="com.example.newsapp.api.Article" />
         <argument
             android:name="title"
             app:argType="string"

@@ -7,18 +7,16 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-@Entity(tableName = "articles")
 data class Article(
 
     @SerializedName("source")
     val source: Source?,
 
-    @PrimaryKey
     @SerializedName("author")
     val author: String,
 
     @SerializedName("title")
-    val title: String?,
+    val title: String,
 
     @SerializedName("description")
     val description: String?,

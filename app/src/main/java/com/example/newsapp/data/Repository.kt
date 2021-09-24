@@ -5,9 +5,7 @@ import android.content.SharedPreferences
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.liveData
-import androidx.preference.PreferenceManager
 import com.example.newsapp.api.NewsAPI
-import com.example.newsapp.data.news.NewsPagingSource
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -28,7 +26,7 @@ class Repository @Inject constructor(
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { NewsPagingSource(newsAPI, null, 1, context) }
+        pagingSourceFactory = { NewsPagingSource(newsAPI, null, NewsType.TopHeadline(), context) }
     ).liveData
 
     fun getNews(query: String) = Pager(
@@ -37,6 +35,6 @@ class Repository @Inject constructor(
             maxSize = 100,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { NewsPagingSource(newsAPI, query, 2, context) }
+        pagingSourceFactory = { NewsPagingSource(newsAPI, query, NewsType.Common(), context) }
     ).liveData
 }

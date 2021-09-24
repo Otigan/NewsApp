@@ -14,6 +14,7 @@ import com.example.newsapp.R
 import com.example.newsapp.api.Article
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
+import com.example.newsapp.features.news.NewsPhotoLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,7 +40,17 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines), NewsAdapter.OnI
             topHeadlinesRecyclerView.apply {
                 setHasFixedSize(true)
                 itemAnimator = null
-                this.adapter = this@HeadlinesFragment.adapter
+                this.adapter = this@HeadlinesFragment.adapter.withLoadStateHeaderAndFooter(
+                    footer = NewsPhotoLoadStateAdapter {
+                        this@HeadlinesFragment.adapter.retry()
+                    },
+                    header = NewsPhotoLoadStateAdapter {
+                        this@HeadlinesFragment.adapter.retry()
+                    }
+                )
+                btnRetry.setOnClickListener {
+                    this@HeadlinesFragment.adapter.retry()
+                }
             }
         }
 
@@ -50,12 +61,10 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines), NewsAdapter.OnI
         adapter.addLoadStateListener { loadState ->
             binding.apply {
                 progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-                topHeadlinesRecyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
+                topHeadlinesRecyclerView.isVisible =
+                    loadState.source.refresh is LoadState.NotLoading
                 btnRetry.isVisible = loadState.source.refresh is LoadState.Error
                 textViewError.isVisible = loadState.source.refresh is LoadState.Error
-
-
-
             }
         }
 

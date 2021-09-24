@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NewsApp</string>
+    <string name="splash_screen">NEWS APP</string>
 </resources>

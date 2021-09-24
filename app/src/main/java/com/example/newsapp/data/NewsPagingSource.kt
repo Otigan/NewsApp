@@ -1,4 +1,4 @@
-package com.example.newsapp.data.news
+package com.example.newsapp.data
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -19,7 +19,7 @@ import java.util.*
 class NewsPagingSource(
     private val newsAPI: NewsAPI,
     private val query: String?,
-    private val newsType: Int,
+    private val newsType: NewsType,
     @ApplicationContext private val context: Context
 
 ) : PagingSource<Int, Article>() {
@@ -55,18 +55,17 @@ class NewsPagingSource(
 
         return try {
             val response = when (newsType) {
-                NewsType.Common.value -> newsAPI.everything(
+                is NewsType.TopHeadline -> newsAPI.topHeadlines(
+                    country!!,
+                    position,
+                    params.loadSize
+                )
+                is NewsType.Common -> newsAPI.everything(
                     query!!,
                     position,
                     params.loadSize,
                     lang
                 )
-                NewsType.TopHeadline.value -> newsAPI.topHeadlines(
-                    country!!,
-                    position,
-                    params.loadSize
-                )
-                else -> throw IllegalStateException()
             }
 
             val news = response.articles
@@ -85,7 +84,7 @@ class NewsPagingSource(
 
 }
 
-enum class NewsType(val value: Int) {
-    TopHeadline(1),
-    Common(2),
+sealed class NewsType() {
+    class TopHeadline() : NewsType()
+    class Common() : NewsType()
 }
