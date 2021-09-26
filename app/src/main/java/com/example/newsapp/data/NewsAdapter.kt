@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.newsapp.R
-import com.example.newsapp.api.Article
 import com.example.newsapp.databinding.ItemNewsBinding
+import com.example.newsapp.models.Article
 
-class NewsAdapter(private val listener: OnItemClickListener) :
+class NewsAdapter(val listener: OnItemClickListener) :
     PagingDataAdapter<Article, NewsAdapter.NewsViewHolder>(NEWS_COMPARATOR) {
 
 
@@ -68,7 +68,7 @@ class NewsAdapter(private val listener: OnItemClickListener) :
     companion object {
         private val NEWS_COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
             override fun areItemsTheSame(oldItem: Article, newItem: Article) =
-                oldItem.title == newItem.title
+                oldItem.url == newItem.url
 
             override fun areContentsTheSame(oldItem: Article, newItem: Article) =
                 oldItem == newItem

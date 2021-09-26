@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">NewsApp</string>
     <string name="splash_screen">NEWS APP</string>
+    <string name="breaking_news">Breaking news</string>
+    <string name="favourite_news">Favourite news</string>
+    <string name="all_news">News</string>
+    <string name="settings">Settings</string>
 </resources>

@@ -11,11 +11,12 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import com.example.newsapp.R
-import com.example.newsapp.api.Article
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentNewsBinding
+import com.example.newsapp.models.Article
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -30,6 +31,7 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
     private lateinit var adapter: NewsAdapter
 
 
+    @ExperimentalPagingApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,39 +39,33 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
 
         adapter = NewsAdapter(this)
 
+        newsViewModel.searchedNews.observe(viewLifecycleOwner, {
+            adapter.submitData(viewLifecycleOwner.lifecycle, it)
+        })
+
         binding.apply {
             newsRecyclerView.apply {
                 setHasFixedSize(true)
                 itemAnimator = null
-                this.adapter = this@NewsFragment.adapter.withLoadStateHeaderAndFooter(
-                    footer = NewsPhotoLoadStateAdapter {
-                        this@NewsFragment.adapter.retry()
-                    },
-                    header = NewsPhotoLoadStateAdapter {
-                        this@NewsFragment.adapter.retry()
-                    }
+                adapter = this@NewsFragment.adapter.withLoadStateHeaderAndFooter(
+                    header = NewsPhotoLoadStateAdapter { this@NewsFragment.adapter.retry() },
+                    footer = NewsPhotoLoadStateAdapter { this@NewsFragment.adapter.retry() },
                 )
-                btnRetry.setOnClickListener {
-                    this@NewsFragment.adapter.retry()
-                }
-            }
-        }
 
-        newsViewModel.allNews.observe(viewLifecycleOwner) {
-            adapter.submitData(viewLifecycleOwner.lifecycle, it)
+            }
         }
 
         adapter.addLoadStateListener { loadState ->
             binding.apply {
-                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-                newsRecyclerView.isVisible = loadState.source.refresh is LoadState.NotLoading
-                btnRetry.isVisible = loadState.source.refresh is LoadState.Error
-                textViewError.isVisible = loadState.source.refresh is LoadState.Error
+                progressBar.isVisible = loadState.mediator?.refresh is LoadState.Loading
+                newsRecyclerView.isVisible = loadState.mediator?.refresh is LoadState.NotLoading
+                btnRetry.isVisible = loadState.mediator?.refresh is LoadState.Error
+                textViewError.isVisible = loadState.mediator?.refresh is LoadState.Error
 
-                if (loadState.source.refresh is LoadState.Error) {
+                if (loadState.mediator?.refresh is LoadState.Error) {
                     Toast.makeText(
                         context,
-                        (loadState.source.refresh as LoadState.Error).error.localizedMessage,
+                        (loadState.mediator?.refresh as LoadState.Error).error.localizedMessage,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -87,14 +83,11 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
             }
         }
 
-
-
         setHasOptionsMenu(true)
     }
 
     override fun onItemClick(article: Article) {
-        val action =
-            NewsFragmentDirections.actionNewsFragmentToDetailedNewsFragment(article, article.title)
+        val action = NewsFragmentDirections.actionNewsFragmentToDetailedNewsFragment(article)
         findNavController().navigate(action)
     }
 
@@ -123,6 +116,7 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
             }
         })
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 

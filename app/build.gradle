@@ -35,6 +35,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+        freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        freeCompilerArgs += "-Xopt-in=kotlinx.RequiresOptIn"
     }
     buildFeatures {
         viewBinding true
@@ -59,7 +61,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.1"
 
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:2.3.0"
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.4.0-alpha04"

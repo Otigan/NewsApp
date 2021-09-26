@@ -1,40 +1,75 @@
 package com.example.newsapp.data
 
-import android.content.Context
-import android.content.SharedPreferences
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.liveData
+import androidx.lifecycle.LiveData
+import androidx.paging.*
 import com.example.newsapp.api.NewsAPI
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.example.newsapp.db.NewsDatabase
+import com.example.newsapp.models.Article
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor(
     private val newsAPI: NewsAPI,
-    @ApplicationContext private val context: Context,
-    private val sharedPreferences: SharedPreferences
+    private val db: NewsDatabase
 ) {
 
 
-    fun getCountry() = sharedPreferences.getString("country", "")
+    fun getCachedNews(query: String): LiveData<PagingData<Article>> {
+        val pagingSourceFactory = { db.getNewsDao().getAll() }
 
-    fun getHeadlines() = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            maxSize = 100,
-            enablePlaceholders = false
-        ),
-        pagingSourceFactory = { NewsPagingSource(newsAPI, null, NewsType.TopHeadline(), context) }
-    ).liveData
+        val dbQuery = "%${query.replace(' ', '%')}%"
 
-    fun getNews(query: String) = Pager(
-        config = PagingConfig(
-            pageSize = 20,
-            maxSize = 100,
-            enablePlaceholders = false
-        ),
-        pagingSourceFactory = { NewsPagingSource(newsAPI, query, NewsType.Common(), context) }
-    ).liveData
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            remoteMediator = NewsRemoteMediator(
+                dbQuery,
+                newsAPI,
+                db,
+                COMMON_NEWS_CONST
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).liveData
+    }
+
+    @ExperimentalPagingApi
+    fun getBreakingNews(): LiveData<PagingData<Article>> {
+        val pagingSourceFactory = { db.getNewsDao().getAllBreakingNews() }
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            remoteMediator = NewsRemoteMediator(
+                api = newsAPI,
+                db = db,
+                newsType = BREAKING_NEWS_CONST
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).liveData
+    }
+
+    fun getLikedNews(): LiveData<PagingData<Article>> {
+
+        val pagingSourceFactory = { db.getNewsDao().getAllLikedArticles() }
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).liveData
+    }
+
+    suspend fun setLike(url: String) = db.getNewsDao().setLike(url)
+
+    suspend fun removeLike(url: String) = db.getNewsDao().removeLike(url)
+
+
 }

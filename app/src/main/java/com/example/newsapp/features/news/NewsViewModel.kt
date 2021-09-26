@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.cachedIn
 import com.example.newsapp.data.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,19 +19,19 @@ class NewsViewModel @Inject constructor(
 
     val currentQuery = state.getLiveData(CURRENT_QUERY, DEFAULT_QUERY)
 
-
     fun changeQuery(query: String) {
         currentQuery.value = query
     }
 
-    val allNews = currentQuery.switchMap {
-        repo.getNews(it).cachedIn(viewModelScope)
-
+    @ExperimentalPagingApi
+    val searchedNews = currentQuery.switchMap {
+        repo.getCachedNews(it).cachedIn(viewModelScope)
     }
+
 
     companion object {
         private const val CURRENT_QUERY = "current_query"
-        private const val DEFAULT_QUERY = "cats"
+        private const val DEFAULT_QUERY = "Кот"
     }
 
 }

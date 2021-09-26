@@ -1,4 +1,4 @@
-package com.example.newsapp.api
+package com.example.newsapp.models
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -6,7 +6,6 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ApiResponse(
-
     val status: String,
     val totalResults: Int,
     val articles: List<Article>

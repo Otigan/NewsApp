@@ -30,6 +30,7 @@
         android:layout_centerHorizontal="true"
         android:text="Results could not be loaded"
         android:textSize="20sp"
+        android:visibility="gone"
         tools:visibility="visible" />
 
     <Button
