@@ -13,6 +13,9 @@ interface NewsDao {
     @Query("SELECT * FROM articles")
     suspend fun getList(): List<Article>
 
+    @Query("SELECT * FROM articles WHERE isLiked = 1 ORDER BY title ASC")
+    suspend fun getListOfLiked(): List<Article>
+
     // Common news
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -41,6 +44,6 @@ interface NewsDao {
     @Query("UPDATE articles SET isLiked = 0 WHERE url LIKE:url")
     suspend fun removeLike(url: String)
 
-    @Query("SELECT * from articles WHERE isLiked = 1")
+    @Query("SELECT * from articles WHERE isLiked = 1 ORDER BY title asc")
     fun getAllLikedArticles(): PagingSource<Int, Article>
 }

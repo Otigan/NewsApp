@@ -104,23 +104,13 @@ class NewsRemoteMediator(
             val endOfPaginationReached = articles.isEmpty()
 
             db.withTransaction {
-                val oldArticles = db.getNewsDao().getList()
-                val liked = ArrayList<String>()
-                for (article in oldArticles) {
-                    if (article.isLiked == true) {
-                        liked.add(article.url)
-                    }
-                }
 
-                for (article in articles) {
-                    if (article.url in liked) {
-                        article.isLiked = true
-                    }
-                }
+                saveLikes(articles)
 
                 if (loadType == LoadType.REFRESH) {
                     when (type) {
                         NewsType.BREAKING -> {
+
                             db.getNewsDao().deleteAllBreakingNews()
                             db.getRemoteKeysDao().deleteBreakingRemoteKeys()
                         }
@@ -130,6 +120,7 @@ class NewsRemoteMediator(
                         }
                     }
                 }
+
 
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -152,6 +143,22 @@ class NewsRemoteMediator(
             return MediatorResult.Error(exception)
         } catch (exception: HttpException) {
             return MediatorResult.Error(exception)
+        }
+    }
+
+    suspend fun saveLikes(articles: List<Article>) {
+        val oldArticles = db.getNewsDao().getList()
+        val liked = ArrayList<String>()
+        for (article in oldArticles) {
+            if (article.isLiked == true) {
+                liked.add(article.url)
+            }
+        }
+
+        for (article in articles) {
+            if (article.url in liked) {
+                article.isLiked = true
+            }
         }
     }
 

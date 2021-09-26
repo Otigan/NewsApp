@@ -16,6 +16,12 @@ class FavouriteNewsViewModel @Inject constructor(private val repo: Repository) :
         repo.removeLike(url)
     }
 
+    suspend fun listOfLiked() = repo.getListOfLiked()
+
+    fun setLike(url: String) = viewModelScope.launch(Dispatchers.IO) {
+        repo.setLike(url)
+    }
+
     val likedNews = repo.getLikedNews().cachedIn(viewModelScope)
 
 }

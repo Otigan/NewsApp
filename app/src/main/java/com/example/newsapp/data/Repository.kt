@@ -71,5 +71,7 @@ class Repository @Inject constructor(
 
     suspend fun removeLike(url: String) = db.getNewsDao().removeLike(url)
 
+    suspend fun getListOfLiked(): List<Article> = db.getNewsDao().getListOfLiked()
+
 
 }
