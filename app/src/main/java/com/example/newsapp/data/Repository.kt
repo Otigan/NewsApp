@@ -3,8 +3,8 @@ package com.example.newsapp.data
 import androidx.lifecycle.LiveData
 import androidx.paging.*
 import com.example.newsapp.api.NewsAPI
-import com.example.newsapp.db.NewsDatabase
-import com.example.newsapp.models.Article
+import com.example.newsapp.data.local.db.NewsDatabase
+import com.example.newsapp.data.remote.models.Article
 import javax.inject.Inject
 import javax.inject.Singleton
 

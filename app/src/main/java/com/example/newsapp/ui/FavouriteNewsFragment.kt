@@ -1,4 +1,4 @@
-package com.example.newsapp.features.favourite
+package com.example.newsapp.ui
 
 import android.os.Bundle
 import android.view.View
@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.databinding.FragmentFavouriteNewsBinding
-import com.example.newsapp.models.Article
+import com.example.newsapp.data.remote.models.Article
+import com.example.newsapp.presentation.favourite.FavouriteNewsViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers

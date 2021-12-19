@@ -1,4 +1,4 @@
-package com.example.newsapp.features.detailed
+package com.example.newsapp.ui
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentDetailsBinding
+import com.example.newsapp.presentation.detailed.DetailedViewModel
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -16,7 +17,7 @@ class DetailedNewsFragment : Fragment(R.layout.fragment_details) {
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
-    private val args by navArgs<com.example.newsapp.features.detailed.DetailedNewsFragmentArgs>()
+    private val args by navArgs<DetailedNewsFragmentArgs>()
     private val detailedViewModel by viewModels<DetailedViewModel>()
 
 

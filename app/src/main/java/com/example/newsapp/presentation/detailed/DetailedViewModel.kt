@@ -1,8 +1,7 @@
-package com.example.newsapp.features.detailed
+package com.example.newsapp.presentation.detailed
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.cachedIn
 import com.example.newsapp.data.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

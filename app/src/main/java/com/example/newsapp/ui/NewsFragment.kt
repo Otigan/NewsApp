@@ -1,4 +1,4 @@
-package com.example.newsapp.features.news
+package com.example.newsapp.ui
 
 import android.os.Bundle
 import android.view.Menu
@@ -15,8 +15,10 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadState
 import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
+import com.example.newsapp.data.remote.models.Article
 import com.example.newsapp.databinding.FragmentNewsBinding
-import com.example.newsapp.models.Article
+import com.example.newsapp.presentation.news.NewsPhotoLoadStateAdapter
+import com.example.newsapp.presentation.news.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -87,7 +89,10 @@ class NewsFragment : Fragment(R.layout.fragment_news), NewsAdapter.OnItemClickLi
     }
 
     override fun onItemClick(article: Article) {
-        val action = NewsFragmentDirections.actionNewsFragmentToDetailedNewsFragment(article)
+        val action =
+            NewsFragmentDirections.actionNewsFragmentToDetailedNewsFragment(
+                article
+            )
         findNavController().navigate(action)
     }
 

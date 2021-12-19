@@ -6,7 +6,7 @@
     app:startDestination="@id/headlinesFragment">
     <fragment
         android:id="@+id/newsFragment"
-        android:name="com.example.newsapp.features.news.NewsFragment"
+        android:name="com.example.newsapp.ui.NewsFragment"
         android:label="News"
         tools:layout="@layout/fragment_news" >
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/headlinesFragment"
-        android:name="com.example.newsapp.features.breaking.BreakingNews"
+        android:name="com.example.newsapp.ui.BreakingNewsFragment"
         android:label="fragment_breaking_news"
         tools:layout="@layout/fragment_breaking_news" >
         <action
@@ -24,16 +24,16 @@
     </fragment>
     <fragment
         android:id="@+id/detailedNewsFragment"
-        android:name="com.example.newsapp.features.detailed.DetailedNewsFragment"
+        android:name="com.example.newsapp.ui.DetailedNewsFragment"
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" >
         <argument
             android:name="article"
-            app:argType="com.example.newsapp.models.Article" />
+            app:argType="com.example.newsapp.data.remote.models.Article" />
     </fragment>
     <fragment
         android:id="@+id/favouriteNewsFragment"
-        android:name="com.example.newsapp.features.favourite.FavouriteNewsFragment"
+        android:name="com.example.newsapp.ui.FavouriteNewsFragment"
         android:label="fragment_favourite_news"
         tools:layout="@layout/fragment_favourite_news" />
 </navigation>

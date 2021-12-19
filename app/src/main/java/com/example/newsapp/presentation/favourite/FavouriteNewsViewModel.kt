@@ -1,4 +1,4 @@
-package com.example.newsapp.features.favourite
+package com.example.newsapp.presentation.favourite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

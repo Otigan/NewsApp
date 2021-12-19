@@ -1,4 +1,4 @@
-package com.example.newsapp.features.breaking
+package com.example.newsapp.ui
 
 import android.os.Bundle
 import android.view.View
@@ -8,14 +8,16 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
+import com.example.newsapp.data.remote.models.Article
 import com.example.newsapp.databinding.FragmentBreakingNewsBinding
-import com.example.newsapp.models.Article
+import com.example.newsapp.presentation.breaking.BreakingNewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @ExperimentalPagingApi
 @AndroidEntryPoint
-class BreakingNews : Fragment(R.layout.fragment_breaking_news), NewsAdapter.OnItemClickListener {
+class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news),
+    NewsAdapter.OnItemClickListener {
 
 
     private var _binding: FragmentBreakingNewsBinding? = null
@@ -43,7 +45,8 @@ class BreakingNews : Fragment(R.layout.fragment_breaking_news), NewsAdapter.OnIt
     }
 
     override fun onItemClick(article: Article) {
-        val action = BreakingNewsDirections.actionHeadlinesFragmentToDetailedNewsFragment(article)
+        val action =
+            BreakingNewsFragmentDirections.actionHeadlinesFragmentToDetailedNewsFragment(article)
         findNavController().navigate(action)
     }
 }

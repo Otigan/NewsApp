@@ -1,4 +1,4 @@
-package com.example.newsapp.features.news
+package com.example.newsapp.presentation.news
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

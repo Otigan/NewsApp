@@ -7,9 +7,9 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.newsapp.api.NewsAPI
-import com.example.newsapp.db.NewsDatabase
-import com.example.newsapp.models.Article
-import com.example.newsapp.models.RemoteKeys
+import com.example.newsapp.data.local.db.NewsDatabase
+import com.example.newsapp.data.remote.models.Article
+import com.example.newsapp.data.remote.models.RemoteKeys
 import retrofit2.HttpException
 import java.io.IOException
 

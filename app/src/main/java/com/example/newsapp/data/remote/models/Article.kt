@@ -1,4 +1,4 @@
-package com.example.newsapp.models
+package com.example.newsapp.data.remote.models
 
 import android.os.Parcelable
 import androidx.room.Entity

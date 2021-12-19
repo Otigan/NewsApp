@@ -1,4 +1,4 @@
-package com.example.newsapp
+package com.example.newsapp.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.preference.PreferenceManager
+import com.example.newsapp.R
 import com.example.newsapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*

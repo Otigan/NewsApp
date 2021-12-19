@@ -1,4 +1,4 @@
-package com.example.newsapp.features.breaking
+package com.example.newsapp.presentation.breaking
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

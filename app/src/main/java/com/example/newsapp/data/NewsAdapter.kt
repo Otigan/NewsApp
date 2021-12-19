@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.newsapp.R
 import com.example.newsapp.databinding.ItemNewsBinding
-import com.example.newsapp.models.Article
+import com.example.newsapp.data.remote.models.Article
 
 class NewsAdapter(val listener: OnItemClickListener) :
     PagingDataAdapter<Article, NewsAdapter.NewsViewHolder>(NEWS_COMPARATOR) {
