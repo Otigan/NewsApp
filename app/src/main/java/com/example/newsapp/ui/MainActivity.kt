@@ -1,7 +1,6 @@
-package com.example.newsapp
+package com.example.newsapp.ui
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -9,25 +8,22 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.preference.PreferenceManager
+import com.example.newsapp.R
 import com.example.newsapp.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-
-
-private lateinit var binding: ActivityMainBinding
-private lateinit var navController: NavController
-private lateinit var appBarConfiguration: AppBarConfiguration
 
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-
 
         val view = binding.root
 
@@ -38,10 +34,8 @@ class MainActivity : AppCompatActivity() {
 
         navController = navHostFragment.findNavController()
 
-        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
 
-
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+        /*navController.addOnDestinationChangedListener { controller, destination, arguments ->
             when (destination.id) {
                 R.id.headlinesFragment -> {
 
@@ -55,21 +49,15 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-        }
-
+        }*/
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.headlinesFragment, R.id.newsFragment, R.id.settingsFragment)
+            setOf(R.id.headlinesFragment)
         )
 
         setSupportActionBar(binding.toolbar)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
-
-        val args = Bundle()
-
-        args.putString("country", Locale.getDefault().country.toString())
-
 
         binding.bottomNavBar.setupWithNavController(navController)
 

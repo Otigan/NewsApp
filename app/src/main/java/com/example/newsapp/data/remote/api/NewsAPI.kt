@@ -1,18 +1,15 @@
-package com.example.newsapp.api
+package com.example.newsapp.data.remote.api
 
-import com.example.newsapp.BuildConfig
+import com.example.newsapp.data.remote.model.ApiResponse
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface NewsAPI {
 
     companion object {
         const val BASE_URL = "https://newsapi.org/v2/"
-        const val API_KEY = BuildConfig.API_KEY
     }
 
-    @Headers("Authorization: $API_KEY")
     @GET("everything")
     suspend fun everything(
         @Query("q") query: String,
@@ -21,10 +18,9 @@ interface NewsAPI {
         @Query("language") lang: String
     ): ApiResponse
 
-    @Headers("Authorization: $API_KEY")
     @GET("top-headlines")
     suspend fun topHeadlines(
-        @Query("country") country: String,
+        @Query("country") country: String = "us",
         @Query("page") page: Int,
         @Query("pageSize") perPage: Int
     ): ApiResponse
