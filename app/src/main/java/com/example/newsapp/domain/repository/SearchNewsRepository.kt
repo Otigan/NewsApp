@@ -4,8 +4,8 @@ import androidx.paging.PagingData
 import com.example.newsapp.data.remote.model.ArticleDto
 import kotlinx.coroutines.flow.Flow
 
-interface HeadlinesRepository {
+interface SearchNewsRepository {
 
-    fun getHeadlines(): Flow<PagingData<ArticleDto>>
+    fun searchedNews(query: String): Flow<PagingData<ArticleDto>>
 
 }

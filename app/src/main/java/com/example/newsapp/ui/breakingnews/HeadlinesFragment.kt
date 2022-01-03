@@ -1,17 +1,17 @@
-package com.example.newsapp.ui
+package com.example.newsapp.ui.breakingnews
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.LoadState
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import com.example.newsapp.presentation.HeadlinesViewModel
+import com.example.newsapp.ui.NewsAdapter
+import com.example.newsapp.ui.NewsLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -38,7 +38,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
 
         val newsAdapter = NewsAdapter()
 
-        newsAdapter.addLoadStateListener { loadState ->
+        /*newsAdapter.addLoadStateListener { loadState ->
             binding.apply {
                 progressBar.isVisible = loadState.source.refresh is LoadState.Loading
                 topHeadlinesRecyclerView.isVisible =
@@ -57,37 +57,21 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
                     textViewError.isVisible = false
                 }
             }
-        }
+        }*/
 
         binding.apply {
             topHeadlinesRecyclerView.apply {
                 setHasFixedSize(true)
-                adapter = newsAdapter
+                adapter = newsAdapter.withLoadStateHeaderAndFooter(
+                    header = NewsLoadStateAdapter { newsAdapter.retry() },
+                    footer = NewsLoadStateAdapter { newsAdapter.retry() }
+                )
             }
         }
-
-
 
         viewLifecycleOwner.lifecycleScope.launch {
             headlinesViewModel.articles.collectLatest(newsAdapter::submitData)
         }
-
-        /*viewLifecycleOwner.lifecycleScope.launch {
-            headlinesViewModel.headlinesFlow.collect { event ->
-                when (event) {
-                    is HeadlinesEvent.Loading -> {
-                        Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
-                    }
-                    is HeadlinesEvent.Error -> {
-                        Snackbar.make(binding.root, event.errorMessage, Snackbar.LENGTH_SHORT)
-                            .show()
-                    }
-                    is HeadlinesEvent.Success -> {
-                        newsAdapter.submitData(event.headlines)
-                    }
-                }
-            }
-        }*/
     }
 
 }

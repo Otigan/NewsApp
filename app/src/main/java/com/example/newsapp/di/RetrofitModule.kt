@@ -1,8 +1,8 @@
 package com.example.newsapp.di
 
-import com.example.newsapp.data.remote.TokenInterceptor
 import com.example.newsapp.data.remote.api.NewsAPI
 import com.example.newsapp.data.remote.api.NewsAPI.Companion.BASE_URL
+import com.example.newsapp.data.remote.interceptor.TokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

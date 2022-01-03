@@ -6,18 +6,18 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.newsapp.data.remote.model.Article
+import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.ItemNewsBinding
 
-class NewsAdapter() : PagingDataAdapter<Article, NewsAdapter.NewsViewHolder>(ARTICLE_COMPARATOR) {
+class NewsAdapter() : PagingDataAdapter<ArticleDto, NewsAdapter.NewsViewHolder>(ARTICLE_COMPARATOR) {
 
     companion object {
-        private val ARTICLE_COMPARATOR = object : DiffUtil.ItemCallback<Article>() {
-            override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean =
+        private val ARTICLE_COMPARATOR = object : DiffUtil.ItemCallback<ArticleDto>() {
+            override fun areContentsTheSame(oldItem: ArticleDto, newItem: ArticleDto): Boolean =
                 oldItem == newItem
 
 
-            override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean =
+            override fun areItemsTheSame(oldItem: ArticleDto, newItem: ArticleDto): Boolean =
                 oldItem.title == newItem.title
         }
     }
@@ -26,7 +26,7 @@ class NewsAdapter() : PagingDataAdapter<Article, NewsAdapter.NewsViewHolder>(ART
     class NewsViewHolder(private val binding: ItemNewsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(article: Article) {
+        fun bind(article: ArticleDto) {
             binding.apply {
                 Glide.with(root)
                     .load(article.urlToImage)

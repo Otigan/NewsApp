@@ -6,7 +6,12 @@
     app:startDestination="@id/headlinesFragment">
     <fragment
         android:id="@+id/headlinesFragment"
-        android:name="com.example.newsapp.ui.HeadlinesFragment"
+        android:name="com.example.newsapp.ui.breakingnews.HeadlinesFragment"
         android:label="Top headlines"
         tools:layout="@layout/fragment_headlines" />
+    <fragment
+        android:id="@+id/searchNewsFragment"
+        android:name="com.example.newsapp.ui.searchnews.SearchNewsFragment"
+        android:label="fragment_news"
+        tools:layout="@layout/fragment_news" />
 </navigation>

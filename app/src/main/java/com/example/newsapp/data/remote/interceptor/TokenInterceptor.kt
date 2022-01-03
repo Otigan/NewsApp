@@ -1,4 +1,4 @@
-package com.example.newsapp.data.remote
+package com.example.newsapp.data.remote.interceptor
 
 import com.example.newsapp.BuildConfig
 import okhttp3.Interceptor

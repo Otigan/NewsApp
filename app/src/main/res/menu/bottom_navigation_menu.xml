@@ -6,10 +6,9 @@
         android:title="Top headlines" />
 
     <item
-        android:id="@+id/newsFragment"
+        android:id="@+id/searchNewsFragment"
         android:icon="@drawable/ic_baseline_article_24"
         android:title="All news" />
-
 
     <item
         android:id="@+id/settingsFragment"
