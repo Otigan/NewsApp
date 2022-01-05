@@ -14,4 +14,8 @@
         android:name="com.example.newsapp.ui.searchnews.SearchNewsFragment"
         android:label="fragment_news"
         tools:layout="@layout/fragment_news" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.newsapp.ui.settings.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

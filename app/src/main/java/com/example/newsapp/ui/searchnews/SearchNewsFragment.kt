@@ -96,9 +96,4 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
         _binding = null
     }
 
-    override fun onStart() {
-        super.onStart()
-        searchNewsViewModel.submitSearchQuery("cats")
-    }
-
 }

@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.headlinesFragment, R.id.searchNewsFragment)
+            setOf(R.id.headlinesFragment, R.id.searchNewsFragment, R.id.settingsFragment)
         )
 
         setSupportActionBar(binding.toolbar)

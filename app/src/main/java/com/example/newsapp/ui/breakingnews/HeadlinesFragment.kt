@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import com.example.newsapp.presentation.HeadlinesViewModel
@@ -70,8 +72,11 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            headlinesViewModel.articles.collectLatest(newsAdapter::submitData)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                headlinesViewModel.articles.collectLatest { articles ->
+                    newsAdapter.submitData(articles)
+                }
+            }
         }
     }
-
 }

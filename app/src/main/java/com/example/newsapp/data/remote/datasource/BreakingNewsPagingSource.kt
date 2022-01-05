@@ -8,7 +8,8 @@ import retrofit2.HttpException
 import java.io.IOException
 
 class BreakingNewsPagingSource(
-    private val newsAPI: NewsAPI
+    private val newsAPI: NewsAPI,
+    private val country: String
 ) : PagingSource<Int, ArticleDto>() {
 
     override fun getRefreshKey(state: PagingState<Int, ArticleDto>): Int? {
@@ -23,7 +24,7 @@ class BreakingNewsPagingSource(
         return try {
 
             val response = newsAPI.topHeadlines(
-                "us",
+                country,
                 position,
                 30
             )

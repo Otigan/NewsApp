@@ -7,7 +7,11 @@ import com.example.newsapp.data.remote.model.ArticleDto
 import retrofit2.HttpException
 import java.io.IOException
 
-class SearchNewsPagingSource(private val query: String, private val newsAPI: NewsAPI) :
+class SearchNewsPagingSource(
+    private val query: String,
+    private val newsAPI: NewsAPI,
+    private val language: String
+) :
     PagingSource<Int, ArticleDto>() {
     override fun getRefreshKey(state: PagingState<Int, ArticleDto>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -24,7 +28,7 @@ class SearchNewsPagingSource(private val query: String, private val newsAPI: New
                 query,
                 position,
                 30,
-                "en"
+                language
             )
             LoadResult.Page(
                 response.articles,

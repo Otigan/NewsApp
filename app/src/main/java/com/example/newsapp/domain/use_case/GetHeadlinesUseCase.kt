@@ -6,7 +6,7 @@ import javax.inject.Inject
 class GetHeadlinesUseCase @Inject constructor(private val headlinesRepository: HeadlinesRepository) {
 
 
-    operator fun invoke() =
-        headlinesRepository.getHeadlines()
+    operator fun invoke(country: String) =
+        headlinesRepository.getHeadlines(country)
 
 }

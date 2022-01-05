@@ -6,6 +6,7 @@ import javax.inject.Inject
 class SearchNewsUseCase @Inject constructor(private val searchNewsRepository: SearchNewsRepository) {
 
 
-    operator fun invoke(query: String) = searchNewsRepository.searchedNews(query)
+    operator fun invoke(query: String, language: String) =
+        searchNewsRepository.searchedNews(query, language)
 
 }

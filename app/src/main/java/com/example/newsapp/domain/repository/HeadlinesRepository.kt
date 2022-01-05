@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface HeadlinesRepository {
 
-    fun getHeadlines(): Flow<PagingData<ArticleDto>>
+    fun getHeadlines(country: String): Flow<PagingData<ArticleDto>>
 
 }

@@ -13,14 +13,14 @@ import javax.inject.Inject
 class SearchNewsRepositoryImpl @Inject constructor(private val newsAPI: NewsAPI) :
     SearchNewsRepository {
 
-    override fun searchedNews(query: String): Flow<PagingData<ArticleDto>> =
+    override fun searchedNews(query: String, language: String): Flow<PagingData<ArticleDto>> =
         Pager(
             PagingConfig(
                 pageSize = 30,
                 maxSize = 100,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { SearchNewsPagingSource(query, newsAPI) }
+            pagingSourceFactory = { SearchNewsPagingSource(query, newsAPI, language) }
         ).flow
 
 }

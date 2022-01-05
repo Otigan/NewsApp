@@ -8,4 +8,11 @@
         app:key="country"
         app:title="Choose country" />
 
+    <ListPreference
+        app:dialogTitle="Select language"
+        app:entries="@array/pref_language_entries"
+        app:entryValues="@array/pref_language_values"
+        app:key="language"
+        app:title="Select language" />
+
 </PreferenceScreen>

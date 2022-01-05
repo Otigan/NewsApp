@@ -22,4 +22,5 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindSearchNewsRepository(impl: SearchNewsRepositoryImpl): SearchNewsRepository
 
+
 }
