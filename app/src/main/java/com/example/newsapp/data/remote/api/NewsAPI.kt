@@ -14,15 +14,15 @@ interface NewsAPI {
     suspend fun everything(
         @Query("q") query: String,
         @Query("page") page: Int,
-        @Query("pageSize") perPage: Int,
+        @Query("pageSize") pageSize: Int,
         @Query("language") lang: String
     ): NewsResponse
 
     @GET("top-headlines")
     suspend fun topHeadlines(
-        @Query("country") country: String = "us",
+        @Query("country") country: String,
         @Query("page") page: Int,
-        @Query("pageSize") perPage: Int
+        @Query("pageSize") pageSize: Int
     ): NewsResponse
 
 

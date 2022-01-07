@@ -11,8 +11,8 @@ import com.example.newsapp.R
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentNewsBinding
 import com.example.newsapp.presentation.SearchNewsViewModel
-import com.example.newsapp.ui.NewsAdapter
-import com.example.newsapp.ui.NewsLoadStateAdapter
+import com.example.newsapp.ui.adapter.NewsAdapter
+import com.example.newsapp.ui.adapter.NewsLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect

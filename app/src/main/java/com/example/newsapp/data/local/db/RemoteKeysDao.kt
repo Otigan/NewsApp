@@ -1,4 +1,4 @@
-package com.example.newsapp.data.local
+package com.example.newsapp.data.local.db
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -12,8 +12,8 @@ interface RemoteKeysDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(remoteKeys: List<RemoteKeys>)
 
-    @Query("SELECT * FROM remote_keys WHERE articleId = :articleId")
-    suspend fun remoteKeysArticleId(articleId: Int): RemoteKeys?
+    @Query("SELECT * FROM remote_keys WHERE articleUrl = :url")
+    suspend fun remoteKeysArticleUrl(url: String): RemoteKeys?
 
     @Query("DELETE FROM remote_keys")
     suspend fun deleteAll()

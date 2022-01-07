@@ -1,4 +1,4 @@
-package com.example.newsapp.data.local
+package com.example.newsapp.data.local.db
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
@@ -11,12 +11,12 @@ import com.example.newsapp.data.remote.model.ArticleDto
 interface ArticleDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAllArticles(articles: List<ArticleDto>)
+    suspend fun insertAll(articles: List<ArticleDto>)
 
     @Query("SELECT * FROM articles")
     fun getAllArticles(): PagingSource<Int, ArticleDto>
 
     @Query("DELETE FROM articles")
-    suspend fun deleteAllArticles()
+    suspend fun deleteAll()
 
 }

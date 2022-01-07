@@ -8,10 +8,10 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "articles")
 data class ArticleDto(
-    @PrimaryKey val id: Int,
     val title: String?,
     val description: String?,
-    val url: String?,
+    @PrimaryKey
+    val url: String,
     val urlToImage: String?,
     val content: String?
 ) : Parcelable {

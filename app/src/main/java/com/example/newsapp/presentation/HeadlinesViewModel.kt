@@ -11,7 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HeadlinesViewModel @Inject constructor(
     private val getHeadlinesUseCase: GetHeadlinesUseCase,
-    private val getSelectedCountryUseCase: GetSelectedCountryUseCase
+    private val getSelectedCountryUseCase: GetSelectedCountryUseCase,
 ) :
     ViewModel() {
 
@@ -29,9 +29,9 @@ class HeadlinesViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            getSelectedCountryUseCase().collect { country ->
-                getHeadlinesUseCase(country).cachedIn(viewModelScope).collect {
-                    _articles.value = it
+            getSelectedCountryUseCase().collectLatest { country ->
+                getHeadlinesUseCase(country).cachedIn(viewModelScope).collectLatest { data ->
+                    _articles.value = data
                 }
             }
         }

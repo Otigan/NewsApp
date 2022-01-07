@@ -14,8 +14,8 @@ import com.example.newsapp.R
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import com.example.newsapp.presentation.HeadlinesViewModel
-import com.example.newsapp.ui.NewsAdapter
-import com.example.newsapp.ui.NewsLoadStateAdapter
+import com.example.newsapp.ui.adapter.NewsAdapter
+import com.example.newsapp.ui.adapter.NewsLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -43,27 +43,6 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
         val newsAdapter = NewsAdapter { article ->
             navigateToDetailedNews(article)
         }
-
-        /*newsAdapter.addLoadStateListener { loadState ->
-            binding.apply {
-                progressBar.isVisible = loadState.source.refresh is LoadState.Loading
-                topHeadlinesRecyclerView.isVisible =
-                    loadState.source.refresh is LoadState.NotLoading
-                btnRetry.isVisible = loadState.source.refresh is LoadState.Error
-                textViewError.isVisible = loadState.source.refresh is LoadState.Error
-
-                // empty view
-                if (loadState.source.refresh is LoadState.NotLoading &&
-                    loadState.append.endOfPaginationReached &&
-                    newsAdapter.itemCount < 1
-                ) {
-                    topHeadlinesRecyclerView.isVisible = false
-                    textViewError.isVisible = true
-                } else {
-                    textViewError.isVisible = false
-                }
-            }
-        }*/
 
         binding.apply {
             topHeadlinesRecyclerView.apply {

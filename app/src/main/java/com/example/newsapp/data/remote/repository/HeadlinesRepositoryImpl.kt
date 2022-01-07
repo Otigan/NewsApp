@@ -4,8 +4,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.newsapp.data.local.ArticleRemoteMediator
-import com.example.newsapp.data.local.NewsDatabase
+import com.example.newsapp.data.local.datasource.ArticleRemoteMediator
+import com.example.newsapp.data.local.db.NewsDatabase
 import com.example.newsapp.data.remote.api.NewsAPI
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.domain.repository.HeadlinesRepository
@@ -18,14 +18,14 @@ class HeadlinesRepositoryImpl @Inject constructor(
 ) :
     HeadlinesRepository {
 
-    @ExperimentalPagingApi
+    @OptIn(ExperimentalPagingApi::class)
     override fun getHeadlines(country: String): Flow<PagingData<ArticleDto>> {
 
         val pagingSourceFactory = { newsDatabase.articleDao().getAllArticles() }
 
         return Pager(
             config = PagingConfig(
-                pageSize = 30,
+                pageSize = 20,
                 maxSize = 100,
                 enablePlaceholders = false
             ),
