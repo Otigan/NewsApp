@@ -53,11 +53,17 @@ dependencies {
 
     def paging_version = "3.1.0"
 
-    def room_version = "2.3.0"
+    def room_version = "2.4.0"
+
+    // Preference
     implementation 'androidx.preference:preference-ktx:1.1.1'
+
+    // Room
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-paging:2.4.0-alpha04"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
 
     // MaterialDesign
     implementation 'com.google.android.material:material:1.4.0'

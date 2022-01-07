@@ -10,7 +10,9 @@ import com.example.newsapp.domain.repository.SearchNewsRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SearchNewsRepositoryImpl @Inject constructor(private val newsAPI: NewsAPI) :
+class SearchNewsRepositoryImpl @Inject constructor(
+    private val newsAPI: NewsAPI,
+) :
     SearchNewsRepository {
 
     override fun searchedNews(query: String, language: String): Flow<PagingData<ArticleDto>> =

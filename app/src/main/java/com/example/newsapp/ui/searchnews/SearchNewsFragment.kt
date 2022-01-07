@@ -6,7 +6,9 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.newsapp.R
+import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentNewsBinding
 import com.example.newsapp.presentation.SearchNewsViewModel
 import com.example.newsapp.ui.NewsAdapter
@@ -38,7 +40,9 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val newsAdapter = NewsAdapter()
+        val newsAdapter = NewsAdapter { article ->
+            navigateToDetailedNews(article)
+        }
 
         binding.apply {
             newsRecyclerView.apply {
@@ -94,6 +98,13 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun navigateToDetailedNews(article: ArticleDto) {
+        val action =
+            SearchNewsFragmentDirections.actionSearchNewsFragmentToDetailNewsFragment(article)
+
+        findNavController().navigate(action)
     }
 
 }

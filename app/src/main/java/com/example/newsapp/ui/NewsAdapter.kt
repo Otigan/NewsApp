@@ -9,7 +9,8 @@ import com.bumptech.glide.Glide
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.ItemNewsBinding
 
-class NewsAdapter() : PagingDataAdapter<ArticleDto, NewsAdapter.NewsViewHolder>(ARTICLE_COMPARATOR) {
+class NewsAdapter(private val onClick: (article: ArticleDto) -> Unit) :
+    PagingDataAdapter<ArticleDto, NewsAdapter.NewsViewHolder>(ARTICLE_COMPARATOR) {
 
     companion object {
         private val ARTICLE_COMPARATOR = object : DiffUtil.ItemCallback<ArticleDto>() {
@@ -23,11 +24,17 @@ class NewsAdapter() : PagingDataAdapter<ArticleDto, NewsAdapter.NewsViewHolder>(
     }
 
 
-    class NewsViewHolder(private val binding: ItemNewsBinding) :
+    class NewsViewHolder(
+        private val binding: ItemNewsBinding,
+        private val onClick: (article: ArticleDto) -> Unit
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(article: ArticleDto) {
             binding.apply {
+                root.setOnClickListener {
+                    onClick(article)
+                }
                 Glide.with(root)
                     .load(article.urlToImage)
                     .into(newsImage)
@@ -43,8 +50,11 @@ class NewsAdapter() : PagingDataAdapter<ArticleDto, NewsAdapter.NewsViewHolder>(
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): NewsViewHolder {
         val binding = ItemNewsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return NewsViewHolder(binding)
+        return NewsViewHolder(binding, onClick)
     }
 }

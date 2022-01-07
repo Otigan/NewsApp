@@ -1,6 +1,5 @@
 package com.example.newsapp.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.domain.use_case.GetSelectedCountryUseCase
@@ -33,13 +32,11 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             launch {
                 getSelectedCountryUseCase().collectLatest { selectedCountry ->
-                    Log.d("SettingsViewModel", "countryViewModel: $selectedCountry ")
                     _selectedCountry.value = selectedCountry
                 }
             }
             launch {
                 getSelectedLanguageUseCase().collectLatest { language ->
-                    Log.d("SettingsViewModel", "languageViewModel: $language ")
                     _selectedLanguage.value = language
                 }
             }

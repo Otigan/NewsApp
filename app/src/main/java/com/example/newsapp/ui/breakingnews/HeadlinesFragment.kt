@@ -9,7 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.newsapp.R
+import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import com.example.newsapp.presentation.HeadlinesViewModel
 import com.example.newsapp.ui.NewsAdapter
@@ -38,7 +40,9 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val newsAdapter = NewsAdapter()
+        val newsAdapter = NewsAdapter { article ->
+            navigateToDetailedNews(article)
+        }
 
         /*newsAdapter.addLoadStateListener { loadState ->
             binding.apply {
@@ -78,5 +82,17 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun navigateToDetailedNews(article: ArticleDto) {
+        val action =
+            HeadlinesFragmentDirections.actionHeadlinesFragmentToDetailNewsFragment(article)
+
+        findNavController().navigate(action)
     }
 }

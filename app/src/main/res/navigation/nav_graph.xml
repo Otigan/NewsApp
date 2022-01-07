@@ -8,14 +8,31 @@
         android:id="@+id/headlinesFragment"
         android:name="com.example.newsapp.ui.breakingnews.HeadlinesFragment"
         android:label="Top headlines"
-        tools:layout="@layout/fragment_headlines" />
+        tools:layout="@layout/fragment_headlines" >
+        <action
+            android:id="@+id/action_headlinesFragment_to_detailNewsFragment"
+            app:destination="@id/detailNewsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchNewsFragment"
         android:name="com.example.newsapp.ui.searchnews.SearchNewsFragment"
         android:label="fragment_news"
-        tools:layout="@layout/fragment_news" />
+        tools:layout="@layout/fragment_news" >
+        <action
+            android:id="@+id/action_searchNewsFragment_to_detailNewsFragment"
+            app:destination="@id/detailNewsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.newsapp.ui.settings.SettingsFragment"
         android:label="SettingsFragment" />
+    <fragment
+        android:id="@+id/detailNewsFragment"
+        android:name="com.example.newsapp.ui.detail.DetailNewsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="article"
+            app:argType="com.example.newsapp.data.remote.model.ArticleDto" />
+    </fragment>
 </navigation>

@@ -1,6 +1,5 @@
 package com.example.newsapp.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -29,7 +28,6 @@ class SearchNewsViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             getSelectedLanguageUseCase().collect { language ->
-                Log.d("SearchNewsViewModel", "language: $language")
                 selectedLanguage = language
                 currentQuery.value = "cats"
             }
