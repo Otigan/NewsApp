@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
+import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.newsapp.R
 import com.example.newsapp.data.NewsAdapter
 import com.example.newsapp.data.remote.models.Article
@@ -35,6 +36,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news),
             setHasFixedSize(true)
             itemAnimator = null
             adapter = newsAdapter
+            addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
         }
 
         breakingNewsViewModel.getBreakingNews().observe(viewLifecycleOwner, {
