@@ -3,16 +3,16 @@
     <item
         android:id="@+id/headlinesFragment"
         android:icon="@drawable/ic_baseline_priority_high_24"
-        android:title="Top headlines" />
+        android:title="@string/nav_title_breaking_news" />
 
     <item
         android:id="@+id/searchNewsFragment"
         android:icon="@drawable/ic_baseline_article_24"
-        android:title="All news" />
+        android:title="@string/nav_title_search_news" />
 
     <item
         android:id="@+id/settingsFragment"
         android:icon="@drawable/ic_baseline_settings_24"
-        android:title="Settings" />
+        android:title="@string/nav_title_settings" />
 
 </menu>

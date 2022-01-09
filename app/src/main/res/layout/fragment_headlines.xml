@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="Retry"
+        android:text="@string/btn_retry"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/btn_retry"
         android:layout_centerInParent="true"
-        android:text="Could not load data"
+        android:text="@string/txt_view_load_data_error"
         android:textSize="20sp"
         android:visibility="gone"
         tools:visibility="visible" />

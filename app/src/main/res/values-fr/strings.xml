@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NewsApp</string>
+
+    <!--  Error  -->
+    <string name="btn_retry">Retenter</string>
+    <string name="txt_view_load_data_error">Impossible de charger les données</string>
+
+    <!--  SearchNewsFragment  -->
+    <string name="txt_view_error_query">Aucun résultat trouvé pour cette requête</string>
+
+    <!--  Navigation Titles  -->
+    <string name="nav_title_breaking_news">Dernières nouvelles</string>
+    <string name="nav_title_search_news">Rechercher des actualités</string>
+    <string name="nav_title_settings">Réglages</string>
+
+
+    <!--  Toolbar Action  -->
+    <string name="action_search">Chercher</string>
+</resources>

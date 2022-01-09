@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">NewsApp</string>
+
+    <!--  Error  -->
+    <string name="btn_retry">Retry</string>
+    <string name="txt_view_load_data_error">Could not load data</string>
+
+    <!--  SearchNewsFragment  -->
+    <string name="txt_view_error_query">No results found for this query</string>
+
+    <!--  Navigation Titles  -->
+    <string name="nav_title_breaking_news">Breaking news</string>
+    <string name="nav_title_search_news">Search news</string>
+    <string name="nav_title_settings">Settings</string>
+
+
+    <!--  Toolbar Action  -->
+    <string name="action_search">Search</string>
 </resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NewsApp</string>
+
+    <!--  Error  -->
+    <string name="btn_retry">Повторить</string>
+    <string name="txt_view_load_data_error">Не удалось загрузить данные</string>
+
+    <!--  SearchNewsFragment  -->
+    <string name="txt_view_error_query">Нет результатов для данного запроса</string>
+
+    <!--  Navigation Titles  -->
+    <string name="nav_title_breaking_news">Главные новости</string>
+    <string name="nav_title_search_news">Поиск новостей</string>
+    <string name="nav_title_settings">Настойки</string>
+
+
+    <!--  Toolbar Action  -->
+    <string name="action_search">Поиск</string>
+</resources>
