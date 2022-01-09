@@ -1,5 +1,6 @@
 package com.example.newsapp.presentation
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newsapp.domain.use_case.GetSelectedCountryUseCase
@@ -19,7 +20,7 @@ class SettingsViewModel @Inject constructor(
     private val getSelectedCountryUseCase: GetSelectedCountryUseCase,
     private val selectCountryUseCase: SelectCountryUseCase,
     private val getSelectedLanguageUseCase: GetSelectedLanguageUseCase,
-    private val selectLanguageUseCase: SelectLanguageUseCase
+    private val selectLanguageUseCase: SelectLanguageUseCase,
 ) : ViewModel() {
 
     private val _selectedCountry = MutableStateFlow("")
@@ -43,8 +44,8 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun setLanguage(language: String) = viewModelScope.launch(Dispatchers.IO) {
-        selectLanguageUseCase(language)
+    fun setLocale(context: Context, language: String) = viewModelScope.launch(Dispatchers.IO) {
+        selectLanguageUseCase(context, language)
     }
 
     fun setCountry(country: String) = viewModelScope.launch(Dispatchers.IO) {

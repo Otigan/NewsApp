@@ -17,4 +17,12 @@
 
     <!--  Toolbar Action  -->
     <string name="action_search">Chercher</string>
+
+    <array name="pref_country_entries">
+        <item>Russie</item>
+        <item>USA</item>
+        <item>La France</item>
+    </array>
+    <string name="preference_country_title">Choisissez un pays</string>
+    <string name="preference_language_title">Choisissez la langue</string>
 </resources>

@@ -1,6 +1,6 @@
-package com.example.newsapp.data.remote.repository
+package com.example.newsapp.data.local.repository
 
-import com.example.newsapp.data.remote.datasource.CountryDataSource
+import com.example.newsapp.data.local.datasource.CountryDataSource
 import javax.inject.Inject
 
 class CountryDataStoreRepository @Inject constructor(private val countryDataSource: CountryDataSource) {

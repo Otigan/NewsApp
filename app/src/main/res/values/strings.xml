@@ -16,4 +16,14 @@
 
     <!--  Toolbar Action  -->
     <string name="action_search">Search</string>
+
+    <!--  Preferences  -->
+    <string name="preference_country_title">Choose country</string>
+    <string name="preference_language_title">Choose language</string>
+
+    <array name="pref_country_entries">
+        <item>Russia</item>
+        <item>USA</item>
+        <item>France</item>
+    </array>
 </resources>

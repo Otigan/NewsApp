@@ -14,7 +14,14 @@
     <string name="nav_title_search_news">Поиск новостей</string>
     <string name="nav_title_settings">Настойки</string>
 
-
     <!--  Toolbar Action  -->
     <string name="action_search">Поиск</string>
+
+    <array name="pref_country_entries">
+        <item>Россия</item>
+        <item>США</item>
+        <item>Франция</item>
+    </array>
+    <string name="preference_country_title">Выберите страну</string>
+    <string name="preference_language_title">Выберите язык</string>
 </resources>

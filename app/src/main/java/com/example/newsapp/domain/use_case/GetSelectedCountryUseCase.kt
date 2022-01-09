@@ -1,6 +1,6 @@
 package com.example.newsapp.domain.use_case
 
-import com.example.newsapp.data.remote.repository.CountryDataStoreRepository
+import com.example.newsapp.data.local.repository.CountryDataStoreRepository
 import javax.inject.Inject
 
 class GetSelectedCountryUseCase @Inject constructor(

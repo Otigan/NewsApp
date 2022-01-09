@@ -24,7 +24,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.preference_settings, rootKey)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -57,7 +56,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
         languagePref?.let {
             it.setOnPreferenceChangeListener { _, newValue ->
-                settingsViewModel.setLanguage(newValue.toString())
+                settingsViewModel.setLocale(requireContext(), newValue.toString())
+                activity?.recreate()
                 true
             }
         }

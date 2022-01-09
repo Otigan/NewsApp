@@ -6,13 +6,13 @@
         app:entries="@array/pref_country_entries"
         app:entryValues="@array/pref_country_values"
         app:key="country"
-        app:title="Choose country" />
+        app:title="@string/preference_country_title" />
 
     <ListPreference
         app:dialogTitle="Select language"
         app:entries="@array/pref_language_entries"
         app:entryValues="@array/pref_language_values"
         app:key="language"
-        app:title="Select language" />
+        app:title="@string/preference_language_title" />
 
 </PreferenceScreen>

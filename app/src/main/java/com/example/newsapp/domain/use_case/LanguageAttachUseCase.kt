@@ -4,11 +4,9 @@ import android.content.Context
 import com.example.newsapp.data.local.repository.LanguageDataStoreRepository
 import javax.inject.Inject
 
-class SelectLanguageUseCase @Inject constructor(
+class LanguageAttachUseCase @Inject constructor(
     private val languageDataStoreRepository: LanguageDataStoreRepository
 ) {
-
-    suspend operator fun invoke(context: Context, language: String) =
-        languageDataStoreRepository.setLocale(context, language)
-
+    suspend operator fun invoke(context: Context) =
+        languageDataStoreRepository.onAttach(context)
 }

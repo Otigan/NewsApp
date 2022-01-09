@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <array name="pref_country_entries">
-        <item>Russia</item>
-        <item>USA</item>
-        <item>France</item>
-    </array>
-</resources>

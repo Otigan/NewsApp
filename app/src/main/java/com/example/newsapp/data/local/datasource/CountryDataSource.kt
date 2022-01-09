@@ -1,4 +1,4 @@
-package com.example.newsapp.data.remote.datasource
+package com.example.newsapp.data.local.datasource
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences

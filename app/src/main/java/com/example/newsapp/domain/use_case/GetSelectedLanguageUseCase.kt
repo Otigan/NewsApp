@@ -1,6 +1,6 @@
 package com.example.newsapp.domain.use_case
 
-import com.example.newsapp.data.remote.repository.LanguageDataStoreRepository
+import com.example.newsapp.data.local.repository.LanguageDataStoreRepository
 import javax.inject.Inject
 
 class GetSelectedLanguageUseCase @Inject constructor(
