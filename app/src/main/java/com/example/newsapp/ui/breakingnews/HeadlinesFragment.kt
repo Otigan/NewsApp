@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,9 +19,12 @@ import com.example.newsapp.R
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import com.example.newsapp.presentation.HeadlinesViewModel
+import com.example.newsapp.presentation.NetworkStatusViewModel
+import com.example.newsapp.presentation.State
 import com.example.newsapp.ui.adapter.NewsAdapter
 import com.example.newsapp.ui.adapter.NewsLoadStateAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -31,6 +35,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
     private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
     private val headlinesViewModel by viewModels<HeadlinesViewModel>()
+    private val networkStatusViewModel by activityViewModels<NetworkStatusViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +47,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
     }
 
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -61,6 +67,15 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
                 newsAdapter.retry()
             }
         }
+
+        networkStatusViewModel.networkState.observe(viewLifecycleOwner, { state ->
+            when (state) {
+                State.Error -> Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show()
+
+                State.Fetched -> Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show()
+
+            }
+        })
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
