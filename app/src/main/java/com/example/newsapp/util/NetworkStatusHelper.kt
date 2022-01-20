@@ -1,17 +1,17 @@
 package com.example.newsapp.util
 
+import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.map
+import android.util.Log
+import androidx.lifecycle.LiveData
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+const val TAG = "NetworkHelper"
 
 sealed class NetworkStatus {
     object Available : NetworkStatus()
@@ -19,44 +19,84 @@ sealed class NetworkStatus {
 }
 
 @Singleton
-class NetworkStatusHelper @Inject constructor(private val connectivityManager: ConnectivityManager) {
+class NetworkStatusHelper @Inject constructor(@ApplicationContext private val context: Context) :
+    LiveData<NetworkStatus>() {
 
-    @ExperimentalCoroutinesApi
-    val networkStatus = callbackFlow<NetworkStatus> {
-        val networkStatusCallback = object : ConnectivityManager.NetworkCallback() {
+    val validNetworkConnections: MutableSet<Network> = HashSet()
+    private val connectivityManager: ConnectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    private lateinit var connectivityManagerCallback: ConnectivityManager.NetworkCallback
+
+    fun announceStatus() {
+        Log.d(TAG, "announceStatus: ${validNetworkConnections.size}")
+        if (validNetworkConnections.isNotEmpty()) {
+            postValue(NetworkStatus.Available)
+        } else {
+            postValue(NetworkStatus.Unavailable)
+        }
+    }
+
+    private fun getConnectivityManagerCallback() =
+        object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network: Network) {
                 super.onAvailable(network)
-                trySend(NetworkStatus.Available)
+                Log.d(TAG, "onAvailable: available")
+                val networkCapability = connectivityManager.getNetworkCapabilities(network)
+                val hasNetworkConnection =
+                    networkCapability?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                        ?: false
+                if (hasNetworkConnection) {
+                    validNetworkConnections.add(network)
+                    announceStatus()
+                }
             }
 
             override fun onUnavailable() {
                 super.onUnavailable()
-                trySend(NetworkStatus.Unavailable)
+                Log.d(TAG, "onUnavailable: no connection")
+                announceStatus()
             }
 
             override fun onLost(network: Network) {
                 super.onLost(network)
-                trySend(NetworkStatus.Unavailable)
+                Log.d(TAG, "onLost: lost connection")
+                validNetworkConnections.remove(network)
+                announceStatus()
+            }
+
+            override fun onCapabilitiesChanged(
+                network: Network,
+                networkCapabilities: NetworkCapabilities
+            ) {
+                super.onCapabilitiesChanged(network, networkCapabilities)
+                Log.d(TAG, "onCapabilitiesChanged: changed type")
+                if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
+                    validNetworkConnections.add(network)
+                } else {
+                    validNetworkConnections.remove(network)
+                }
+                announceStatus()
             }
         }
-        val request = NetworkRequest.Builder()
+
+
+    override fun onActive() {
+        super.onActive()
+        Log.d(TAG, "onActive: started working")
+        connectivityManagerCallback = getConnectivityManagerCallback()
+        val networkRequest = NetworkRequest.Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build()
-
-        connectivityManager.registerNetworkCallback(request, networkStatusCallback)
-
-        awaitClose {
-            connectivityManager.unregisterNetworkCallback(networkStatusCallback)
-        }
+        connectivityManager.registerNetworkCallback(networkRequest, connectivityManagerCallback)
     }
-}
 
-inline fun <Result> Flow<NetworkStatus>.map(
-    crossinline onUnavailable: suspend () -> Result,
-    crossinline onAvailable: suspend () -> Result
-): Flow<Result> = map { status ->
-    when (status) {
-        NetworkStatus.Available -> onAvailable()
-        NetworkStatus.Unavailable -> onUnavailable()
+    override fun onInactive() {
+        super.onInactive()
+        Log.d(TAG, "onInactive: stopped working")
+        connectivityManager.unregisterNetworkCallback(connectivityManagerCallback)
     }
+
+
 }

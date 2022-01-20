@@ -20,9 +20,9 @@ import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentHeadlinesBinding
 import com.example.newsapp.presentation.HeadlinesViewModel
 import com.example.newsapp.presentation.NetworkStatusViewModel
-import com.example.newsapp.presentation.State
 import com.example.newsapp.ui.adapter.NewsAdapter
 import com.example.newsapp.ui.adapter.NewsLoadStateAdapter
+import com.example.newsapp.util.NetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -35,6 +35,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
     private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
     private val headlinesViewModel by viewModels<HeadlinesViewModel>()
+    @ExperimentalCoroutinesApi
     private val networkStatusViewModel by activityViewModels<NetworkStatusViewModel>()
 
     override fun onCreateView(
@@ -70,12 +71,17 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
 
         networkStatusViewModel.networkState.observe(viewLifecycleOwner, { state ->
             when (state) {
-                State.Error -> Toast.makeText(context, "No internet connection", Toast.LENGTH_SHORT).show()
+                NetworkStatus.Unavailable -> Toast.makeText(
+                    context,
+                    "No internet connection",
+                    Toast.LENGTH_SHORT
+                ).show()
 
-                State.Fetched -> Toast.makeText(context, "Connected", Toast.LENGTH_SHORT).show()
-
+                NetworkStatus.Available -> Toast.makeText(context, "Connected", Toast.LENGTH_SHORT)
+                    .show()
             }
         })
+
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -86,29 +92,34 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            newsAdapter.loadStateFlow.collect { loadState ->
-                val isListEmpty =
-                    loadState.refresh is LoadState.Error && newsAdapter.itemCount == 0
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                newsAdapter.loadStateFlow.collect { loadState ->
+                    val isListEmpty =
+                        loadState.refresh is LoadState.Error && newsAdapter.itemCount == 0
 
-                binding.apply {
-                    textViewError.isVisible = isListEmpty
-                    topHeadlinesRecyclerView.isVisible =
-                        loadState.mediator?.refresh is LoadState.NotLoading
-                    progressBar.isVisible = loadState.mediator?.refresh is LoadState.Loading
-                    btnRetry.isVisible =
-                        loadState.mediator?.refresh is LoadState.Error && newsAdapter.itemCount == 0
-                }
+                    binding.apply {
+                        textViewError.isVisible = isListEmpty
+                        topHeadlinesRecyclerView.isVisible =
+                            loadState.mediator?.refresh is LoadState.NotLoading
+                        progressBar.isVisible = loadState.mediator?.refresh is LoadState.Loading
+                        btnRetry.isVisible =
+                            loadState.mediator?.refresh is LoadState.Error && newsAdapter.itemCount == 0
+                    }
 
-                val errorState = loadState.source.append as? LoadState.Error
-                    ?: loadState.source.prepend as? LoadState.Error
-                    ?: loadState.append as? LoadState.Error
-                    ?: loadState.prepend as? LoadState.Error
+                    val errorState = loadState.source.append as? LoadState.Error
+                        ?: loadState.source.prepend as? LoadState.Error
+                        ?: loadState.append as? LoadState.Error
+                        ?: loadState.prepend as? LoadState.Error
 
-                Log.d("HeadlinesFragment", "errorState:${errorState?.error} ")
+                    Log.d("HeadlinesFragment", "errorState:${errorState?.error} ")
 
-                errorState?.let {
-                    Toast.makeText(context, "\uD83D\uDE28 Wooops ${it.error}", Toast.LENGTH_LONG)
-                        .show()
+                    errorState?.let {
+                        Toast.makeText(
+                            context,
+                            "\uD83D\uDE28 Wooops ${it.error}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }

@@ -2,20 +2,26 @@ package com.example.newsapp.ui.searchnews
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.newsapp.R
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentNewsBinding
+import com.example.newsapp.presentation.NetworkStatusViewModel
 import com.example.newsapp.presentation.SearchNewsViewModel
 import com.example.newsapp.ui.adapter.NewsAdapter
 import com.example.newsapp.ui.adapter.NewsLoadStateAdapter
+import com.example.newsapp.util.NetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -24,6 +30,8 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
     private val searchNewsViewModel by viewModels<SearchNewsViewModel>()
+    @ExperimentalCoroutinesApi
+    private val networkStatusViewModel by activityViewModels<NetworkStatusViewModel>()
 
 
     override fun onCreateView(
@@ -55,8 +63,10 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            searchNewsViewModel.searchResults.collect { data ->
-                newsAdapter.submitData(data)
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchNewsViewModel.searchResults.collectLatest { data ->
+                    newsAdapter.submitData(data)
+                }
             }
         }
     }
