@@ -1,9 +1,11 @@
 package com.example.newsapp.ui.searchnews
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -11,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.paging.LoadState
 import com.example.newsapp.R
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.FragmentNewsBinding
@@ -18,7 +21,6 @@ import com.example.newsapp.presentation.NetworkStatusViewModel
 import com.example.newsapp.presentation.SearchNewsViewModel
 import com.example.newsapp.ui.adapter.NewsAdapter
 import com.example.newsapp.ui.adapter.NewsLoadStateAdapter
-import com.example.newsapp.util.NetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collectLatest
@@ -29,7 +31,10 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
 
     private var _binding: FragmentNewsBinding? = null
     private val binding get() = _binding!!
+    private lateinit var newsAdapter: NewsAdapter
     private val searchNewsViewModel by viewModels<SearchNewsViewModel>()
+
+
     @ExperimentalCoroutinesApi
     private val networkStatusViewModel by activityViewModels<NetworkStatusViewModel>()
 
@@ -48,7 +53,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
         super.onViewCreated(view, savedInstanceState)
         setHasOptionsMenu(true)
 
-        val newsAdapter = NewsAdapter { article ->
+        newsAdapter = NewsAdapter { article ->
             navigateToDetailedNews(article)
         }
 
@@ -61,11 +66,36 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
                 )
             }
         }
+        getResults()
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                searchNewsViewModel.searchResults.collectLatest { data ->
-                    newsAdapter.submitData(data)
+                newsAdapter.loadStateFlow.collectLatest { loadState ->
+                    val isListEmpty =
+                        loadState.refresh is LoadState.Error && newsAdapter.itemCount == 0
+
+                    binding.apply {
+                        textViewError.isVisible = isListEmpty
+                        newsRecyclerView.isVisible =
+                            loadState.refresh is LoadState.NotLoading
+                        progressBar.isVisible = loadState.refresh is LoadState.Loading
+                        btnRetry.isVisible =
+                            loadState.refresh is LoadState.Error && newsAdapter.itemCount == 0
+                    }
+
+                    val errorState = loadState.prepend as? LoadState.Error
+                        ?: loadState.append as? LoadState.Error
+                        ?: loadState.refresh as? LoadState.Error
+
+                    Log.d("SearchNewsFragment", "errorState:${errorState?.error} ")
+
+                    errorState?.let {
+                        Toast.makeText(
+                            context,
+                            "\uD83D\uDE28 Wooops ${it.error}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }
@@ -108,6 +138,18 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    @ExperimentalCoroutinesApi
+    private fun getResults() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                searchNewsViewModel.searchResults.collectLatest { data ->
+                    newsAdapter.submitData(data)
+                }
+            }
+        }
+        newsAdapter.refresh()
     }
 
     private fun navigateToDetailedNews(article: ArticleDto) {

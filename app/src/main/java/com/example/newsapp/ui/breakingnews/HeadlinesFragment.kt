@@ -22,7 +22,6 @@ import com.example.newsapp.presentation.HeadlinesViewModel
 import com.example.newsapp.presentation.NetworkStatusViewModel
 import com.example.newsapp.ui.adapter.NewsAdapter
 import com.example.newsapp.ui.adapter.NewsLoadStateAdapter
-import com.example.newsapp.util.NetworkStatus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -34,7 +33,9 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
 
     private var _binding: FragmentHeadlinesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var newsAdapter: NewsAdapter
     private val headlinesViewModel by viewModels<HeadlinesViewModel>()
+
     @ExperimentalCoroutinesApi
     private val networkStatusViewModel by activityViewModels<NetworkStatusViewModel>()
 
@@ -52,7 +53,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val newsAdapter = NewsAdapter { article ->
+        newsAdapter = NewsAdapter { article ->
             navigateToDetailedNews(article)
         }
 
@@ -69,27 +70,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
             }
         }
 
-        networkStatusViewModel.networkState.observe(viewLifecycleOwner, { state ->
-            when (state) {
-                NetworkStatus.Unavailable -> Toast.makeText(
-                    context,
-                    "No internet connection",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                NetworkStatus.Available -> Toast.makeText(context, "Connected", Toast.LENGTH_SHORT)
-                    .show()
-            }
-        })
-
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                headlinesViewModel.articles.collectLatest { articles ->
-                    newsAdapter.submitData(articles)
-                }
-            }
-        }
+        getResults()
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -100,7 +81,7 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
                     binding.apply {
                         textViewError.isVisible = isListEmpty
                         topHeadlinesRecyclerView.isVisible =
-                            loadState.mediator?.refresh is LoadState.NotLoading
+                            loadState.source.refresh is LoadState.NotLoading || loadState.mediator?.refresh is LoadState.NotLoading
                         progressBar.isVisible = loadState.mediator?.refresh is LoadState.Loading
                         btnRetry.isVisible =
                             loadState.mediator?.refresh is LoadState.Error && newsAdapter.itemCount == 0
@@ -128,6 +109,16 @@ class HeadlinesFragment : Fragment(R.layout.fragment_headlines) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getResults() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                headlinesViewModel.articles.collectLatest { articles ->
+                    newsAdapter.submitData(articles)
+                }
+            }
+        }
     }
 
     private fun navigateToDetailedNews(article: ArticleDto) {

@@ -6,6 +6,7 @@ import com.example.newsapp.data.remote.api.NewsAPI
 import com.example.newsapp.data.remote.model.ArticleDto
 import retrofit2.HttpException
 import java.io.IOException
+import java.net.UnknownHostException
 
 class BreakingNewsPagingSource(
     private val newsAPI: NewsAPI,
@@ -22,7 +23,6 @@ class BreakingNewsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ArticleDto> {
         val position = params.key ?: 1
         return try {
-
             val response = newsAPI.topHeadlines(
                 country,
                 position,
@@ -36,6 +36,8 @@ class BreakingNewsPagingSource(
         } catch (e: HttpException) {
             LoadResult.Error(e)
         } catch (e: IOException) {
+            LoadResult.Error(e)
+        } catch (e: UnknownHostException) {
             LoadResult.Error(e)
         }
     }

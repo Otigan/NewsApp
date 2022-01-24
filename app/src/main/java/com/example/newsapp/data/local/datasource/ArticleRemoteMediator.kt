@@ -11,6 +11,7 @@ import com.example.newsapp.data.local.model.RemoteKeys
 import com.example.newsapp.data.remote.api.NewsAPI
 import com.example.newsapp.data.remote.model.ArticleDto
 import java.io.IOException
+import java.net.ConnectException
 
 @OptIn(ExperimentalPagingApi::class)
 class ArticleRemoteMediator(
@@ -70,6 +71,8 @@ class ArticleRemoteMediator(
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)
         } catch (exception: HttpException) {
+            return MediatorResult.Error(exception)
+        } catch (exception: ConnectException) {
             return MediatorResult.Error(exception)
         }
     }
