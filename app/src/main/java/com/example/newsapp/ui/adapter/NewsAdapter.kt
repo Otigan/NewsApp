@@ -6,6 +6,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.newsapp.data.remote.model.ArticleDto
 import com.example.newsapp.databinding.ItemNewsBinding
 
@@ -37,6 +38,7 @@ class NewsAdapter(private val onClick: (article: ArticleDto) -> Unit) :
                 }
                 Glide.with(root)
                     .load(article.urlToImage)
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .into(newsImage)
                 articleTitle.text = article.title
             }

@@ -101,6 +101,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
         }
     }
 
+    @ExperimentalCoroutinesApi
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_news, menu)
 
@@ -144,7 +145,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_news) {
     private fun getResults() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                searchNewsViewModel.searchResults.collectLatest { data ->
+                searchNewsViewModel.articles.collectLatest { data ->
                     newsAdapter.submitData(data)
                 }
             }

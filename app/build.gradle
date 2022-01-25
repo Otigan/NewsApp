@@ -75,6 +75,9 @@ dependencies {
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
 
+    // Guava
+    implementation("com.google.guava:guava:31.0.1-android")
+
     // Paging
     implementation ("androidx.paging:paging-runtime-ktx:$paging_version")
 
